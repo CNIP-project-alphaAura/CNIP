@@ -1,0 +1,3710 @@
+{
+  "title": "University E-Learning Network Performance Analysis",
+  "protocol_comparison": {
+    "low": {
+      "label": "Low (10 users)",
+      "users": 10,
+      "TCP": {
+        "total_sent": 4207,
+        "total_received": 4189,
+        "total_dropped": 18,
+        "plr_percent": 0.428,
+        "pdr_percent": 99.572,
+        "throughput_kbps": 4639.271,
+        "avg_delay_ms": 63.8333,
+        "avg_jitter_ms": 12.6568
+      },
+      "UDP": {
+        "total_sent": 6145,
+        "total_received": 6111,
+        "total_dropped": 34,
+        "plr_percent": 0.553,
+        "pdr_percent": 99.447,
+        "throughput_kbps": 4619.917,
+        "avg_delay_ms": 63.7242,
+        "avg_jitter_ms": 12.6095
+      }
+    },
+    "medium": {
+      "label": "Medium (30 users)",
+      "users": 30,
+      "TCP": {
+        "total_sent": 47493,
+        "total_received": 45414,
+        "total_dropped": 2079,
+        "plr_percent": 4.377,
+        "pdr_percent": 95.623,
+        "throughput_kbps": 49987.046,
+        "avg_delay_ms": 63.5362,
+        "avg_jitter_ms": 11.8471
+      },
+      "UDP": {
+        "total_sent": 69349,
+        "total_received": 66360,
+        "total_dropped": 2989,
+        "plr_percent": 4.31,
+        "pdr_percent": 95.69,
+        "throughput_kbps": 50059.276,
+        "avg_delay_ms": 63.5826,
+        "avg_jitter_ms": 12.0001
+      }
+    },
+    "high": {
+      "label": "High (100 users)",
+      "users": 100,
+      "TCP": {
+        "total_sent": 497642,
+        "total_received": 412550,
+        "total_dropped": 85092,
+        "plr_percent": 17.099,
+        "pdr_percent": 82.901,
+        "throughput_kbps": 453227.782,
+        "avg_delay_ms": 62.4097,
+        "avg_jitter_ms": 11.8532
+      },
+      "UDP": {
+        "total_sent": 726679,
+        "total_received": 602245,
+        "total_dropped": 124434,
+        "plr_percent": 17.124,
+        "pdr_percent": 82.876,
+        "throughput_kbps": 453822.763,
+        "avg_delay_ms": 62.3877,
+        "avg_jitter_ms": 11.8428
+      }
+    }
+  },
+  "congestion_analysis": {
+    "user_counts": [
+      5,
+      10,
+      15,
+      20,
+      30,
+      40,
+      50,
+      60,
+      75,
+      100,
+      120
+    ],
+    "TCP_throughput": [
+      4597.38,
+      4603.16,
+      4616.64,
+      50005.24,
+      50008.43,
+      50040.81,
+      49904.62,
+      454232.79,
+      453830.78,
+      454221.65,
+      453942.46
+    ],
+    "UDP_throughput": [
+      4615.57,
+      4631.07,
+      4615.76,
+      50065.5,
+      50059.28,
+      50004.65,
+      50093.58,
+      454185.99,
+      454417.76,
+      454517.78,
+      454268.69
+    ],
+    "TCP_plr": [
+      0.689,
+      0.664,
+      0.642,
+      4.418,
+      4.444,
+      4.338,
+      4.471,
+      16.975,
+      17.036,
+      16.958,
+      17.015
+    ],
+    "UDP_plr": [
+      0.537,
+      0.651,
+      0.668,
+      4.375,
+      4.31,
+      4.414,
+      4.269,
+      17.094,
+      17.042,
+      17.004,
+      17.038
+    ],
+    "TCP_delay": [
+      63.946,
+      63.955,
+      63.987,
+      63.639,
+      63.662,
+      63.514,
+      63.589,
+      62.473,
+      62.434,
+      62.448,
+      62.427
+    ],
+    "UDP_delay": [
+      64.012,
+      63.971,
+      63.764,
+      63.604,
+      63.583,
+      63.579,
+      63.531,
+      62.474,
+      62.348,
+      62.442,
+      62.443
+    ],
+    "TCP_pdr": [
+      99.311,
+      99.336,
+      99.358,
+      95.582,
+      95.556,
+      95.662,
+      95.529,
+      83.025,
+      82.964,
+      83.042,
+      82.985
+    ],
+    "UDP_pdr": [
+      99.463,
+      99.349,
+      99.332,
+      95.625,
+      95.69,
+      95.586,
+      95.731,
+      82.906,
+      82.958,
+      82.996,
+      82.962
+    ]
+  },
+  "gbn_experiment": {
+    "loss_0pct": {
+      "loss_prob": 0.0,
+      "window_sizes": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      "efficiencies": [
+        100.0,
+        100.0,
+        100.0,
+        333.33,
+        217.39,
+        128.21,
+        100.0
+      ],
+      "retransmissions": [
+        0,
+        0,
+        0,
+        3944,
+        7888,
+        15776,
+        21199
+      ],
+      "sim_times": [
+        2.5,
+        2.5,
+        2.5,
+        197.55,
+        394.75,
+        789.15,
+        1060.3
+      ]
+    },
+    "loss_5pct": {
+      "loss_prob": 0.05,
+      "window_sizes": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      "efficiencies": [
+        2500.0,
+        1666.67,
+        1000.0,
+        555.56,
+        294.12,
+        151.52,
+        100.0
+      ],
+      "retransmissions": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "sim_times": [
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0
+      ]
+    },
+    "loss_10pct": {
+      "loss_prob": 0.1,
+      "window_sizes": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      "efficiencies": [
+        2500.0,
+        1666.67,
+        1000.0,
+        555.56,
+        294.12,
+        151.52,
+        100.0
+      ],
+      "retransmissions": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "sim_times": [
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0
+      ]
+    },
+    "loss_20pct": {
+      "loss_prob": 0.2,
+      "window_sizes": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      "efficiencies": [
+        2500.0,
+        1666.67,
+        1000.0,
+        555.56,
+        294.12,
+        151.52,
+        100.0
+      ],
+      "retransmissions": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "sim_times": [
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0
+      ]
+    },
+    "theoretical": {
+      "0.0": {
+        "loss_prob": 0.0,
+        "window_sizes": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "efficiencies": [
+          9.09,
+          18.18,
+          36.36,
+          72.73,
+          100.0,
+          100.0,
+          100.0
+        ]
+      },
+      "0.01": {
+        "loss_prob": 0.01,
+        "window_sizes": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "efficiencies": [
+          8.18,
+          16.36,
+          32.73,
+          65.45,
+          90.0,
+          90.0,
+          90.0
+        ]
+      },
+      "0.05": {
+        "loss_prob": 0.05,
+        "window_sizes": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "efficiencies": [
+          5.76,
+          11.52,
+          23.03,
+          46.06,
+          63.33,
+          63.33,
+          63.33
+        ]
+      },
+      "0.1": {
+        "loss_prob": 0.1,
+        "window_sizes": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "efficiencies": [
+          4.09,
+          8.18,
+          16.36,
+          32.73,
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "0.2": {
+        "loss_prob": 0.2,
+        "window_sizes": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "efficiencies": [
+          2.42,
+          4.85,
+          9.7,
+          19.39,
+          26.67,
+          26.67,
+          26.67
+        ]
+      }
+    }
+  },
+  "leaky_bucket_experiment": {
+    "without_lb": {
+      "total_arrived": 248,
+      "total_leaked": 105,
+      "total_dropped": 143,
+      "drop_rate_pct": 57.66,
+      "output_efficiency": 42.34,
+      "timeline": [
+        {
+          "t": 0.0,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.1,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.2,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.3,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.4,
+          "in_bucket": 0,
+          "leaked": 1,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 0.5,
+          "in_bucket": 0,
+          "leaked": 1,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.6,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 0.7,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.8,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.9,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.0,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.1,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.2,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.3,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.4,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.5,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.6,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.7,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.8,
+          "in_bucket": 0,
+          "leaked": 3,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 1.9,
+          "in_bucket": 0,
+          "leaked": 3,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 2.0,
+          "in_bucket": 2,
+          "leaked": 4,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.1,
+          "in_bucket": 4,
+          "leaked": 5,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.2,
+          "in_bucket": 4,
+          "leaked": 6,
+          "dropped": 2,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.3,
+          "in_bucket": 4,
+          "leaked": 7,
+          "dropped": 4,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.4,
+          "in_bucket": 4,
+          "leaked": 8,
+          "dropped": 6,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.5,
+          "in_bucket": 4,
+          "leaked": 9,
+          "dropped": 8,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.6,
+          "in_bucket": 4,
+          "leaked": 10,
+          "dropped": 10,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.7,
+          "in_bucket": 4,
+          "leaked": 11,
+          "dropped": 12,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.8,
+          "in_bucket": 4,
+          "leaked": 12,
+          "dropped": 14,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.9,
+          "in_bucket": 4,
+          "leaked": 13,
+          "dropped": 16,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.0,
+          "in_bucket": 4,
+          "leaked": 14,
+          "dropped": 18,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.1,
+          "in_bucket": 4,
+          "leaked": 15,
+          "dropped": 20,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.2,
+          "in_bucket": 4,
+          "leaked": 16,
+          "dropped": 22,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.3,
+          "in_bucket": 4,
+          "leaked": 17,
+          "dropped": 24,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.4,
+          "in_bucket": 4,
+          "leaked": 18,
+          "dropped": 26,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.5,
+          "in_bucket": 4,
+          "leaked": 19,
+          "dropped": 28,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.6,
+          "in_bucket": 4,
+          "leaked": 20,
+          "dropped": 30,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.7,
+          "in_bucket": 4,
+          "leaked": 21,
+          "dropped": 32,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.8,
+          "in_bucket": 4,
+          "leaked": 22,
+          "dropped": 34,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.9,
+          "in_bucket": 4,
+          "leaked": 23,
+          "dropped": 36,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.0,
+          "in_bucket": 4,
+          "leaked": 24,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.1,
+          "in_bucket": 3,
+          "leaked": 25,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.2,
+          "in_bucket": 2,
+          "leaked": 26,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.3,
+          "in_bucket": 1,
+          "leaked": 27,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.4,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.5,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 4.6,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 4.7,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 4.8,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 4.9,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.0,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.1,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.2,
+          "in_bucket": 0,
+          "leaked": 28,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.3,
+          "in_bucket": 0,
+          "leaked": 29,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.4,
+          "in_bucket": 0,
+          "leaked": 29,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.5,
+          "in_bucket": 0,
+          "leaked": 29,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.6,
+          "in_bucket": 0,
+          "leaked": 29,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.7,
+          "in_bucket": 0,
+          "leaked": 30,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.8,
+          "in_bucket": 0,
+          "leaked": 30,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 5.9,
+          "in_bucket": 0,
+          "leaked": 30,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.0,
+          "in_bucket": 0,
+          "leaked": 31,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.1,
+          "in_bucket": 0,
+          "leaked": 31,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.2,
+          "in_bucket": 0,
+          "leaked": 31,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.3,
+          "in_bucket": 0,
+          "leaked": 31,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.4,
+          "in_bucket": 0,
+          "leaked": 32,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.5,
+          "in_bucket": 0,
+          "leaked": 33,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.6,
+          "in_bucket": 0,
+          "leaked": 33,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.7,
+          "in_bucket": 0,
+          "leaked": 33,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.8,
+          "in_bucket": 0,
+          "leaked": 33,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 6.9,
+          "in_bucket": 0,
+          "leaked": 33,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.0,
+          "in_bucket": 0,
+          "leaked": 33,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.1,
+          "in_bucket": 0,
+          "leaked": 34,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.2,
+          "in_bucket": 0,
+          "leaked": 35,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.3,
+          "in_bucket": 0,
+          "leaked": 35,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.4,
+          "in_bucket": 0,
+          "leaked": 35,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.5,
+          "in_bucket": 0,
+          "leaked": 35,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.6,
+          "in_bucket": 0,
+          "leaked": 36,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.7,
+          "in_bucket": 0,
+          "leaked": 36,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.8,
+          "in_bucket": 0,
+          "leaked": 36,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 7.9,
+          "in_bucket": 0,
+          "leaked": 36,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 8.0,
+          "in_bucket": 0,
+          "leaked": 36,
+          "dropped": 36,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 8.1,
+          "in_bucket": 3,
+          "leaked": 37,
+          "dropped": 36,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.2,
+          "in_bucket": 4,
+          "leaked": 38,
+          "dropped": 39,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.3,
+          "in_bucket": 4,
+          "leaked": 39,
+          "dropped": 43,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.4,
+          "in_bucket": 4,
+          "leaked": 40,
+          "dropped": 46,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.5,
+          "in_bucket": 4,
+          "leaked": 41,
+          "dropped": 49,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.6,
+          "in_bucket": 4,
+          "leaked": 42,
+          "dropped": 53,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.7,
+          "in_bucket": 4,
+          "leaked": 43,
+          "dropped": 57,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.8,
+          "in_bucket": 4,
+          "leaked": 44,
+          "dropped": 60,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.9,
+          "in_bucket": 4,
+          "leaked": 45,
+          "dropped": 63,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.0,
+          "in_bucket": 4,
+          "leaked": 46,
+          "dropped": 66,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.1,
+          "in_bucket": 4,
+          "leaked": 47,
+          "dropped": 70,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.2,
+          "in_bucket": 4,
+          "leaked": 48,
+          "dropped": 74,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.3,
+          "in_bucket": 4,
+          "leaked": 49,
+          "dropped": 77,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.4,
+          "in_bucket": 4,
+          "leaked": 50,
+          "dropped": 80,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.5,
+          "in_bucket": 4,
+          "leaked": 51,
+          "dropped": 83,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.6,
+          "in_bucket": 4,
+          "leaked": 52,
+          "dropped": 87,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.7,
+          "in_bucket": 4,
+          "leaked": 53,
+          "dropped": 91,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.8,
+          "in_bucket": 4,
+          "leaked": 54,
+          "dropped": 95,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.9,
+          "in_bucket": 4,
+          "leaked": 55,
+          "dropped": 99,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.0,
+          "in_bucket": 4,
+          "leaked": 56,
+          "dropped": 102,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.1,
+          "in_bucket": 4,
+          "leaked": 57,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.2,
+          "in_bucket": 3,
+          "leaked": 58,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.3,
+          "in_bucket": 2,
+          "leaked": 59,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.4,
+          "in_bucket": 1,
+          "leaked": 60,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.5,
+          "in_bucket": 0,
+          "leaked": 61,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.6,
+          "in_bucket": 0,
+          "leaked": 61,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 10.7,
+          "in_bucket": 0,
+          "leaked": 61,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 10.8,
+          "in_bucket": 0,
+          "leaked": 61,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 10.9,
+          "in_bucket": 0,
+          "leaked": 62,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.0,
+          "in_bucket": 0,
+          "leaked": 63,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.1,
+          "in_bucket": 0,
+          "leaked": 63,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 11.2,
+          "in_bucket": 0,
+          "leaked": 63,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 11.3,
+          "in_bucket": 0,
+          "leaked": 63,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 11.4,
+          "in_bucket": 0,
+          "leaked": 64,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.5,
+          "in_bucket": 0,
+          "leaked": 65,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.6,
+          "in_bucket": 0,
+          "leaked": 65,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 11.7,
+          "in_bucket": 0,
+          "leaked": 65,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 11.8,
+          "in_bucket": 0,
+          "leaked": 65,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 11.9,
+          "in_bucket": 0,
+          "leaked": 65,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 12.0,
+          "in_bucket": 0,
+          "leaked": 66,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.1,
+          "in_bucket": 0,
+          "leaked": 66,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 12.2,
+          "in_bucket": 0,
+          "leaked": 67,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.3,
+          "in_bucket": 0,
+          "leaked": 67,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 12.4,
+          "in_bucket": 0,
+          "leaked": 67,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 12.5,
+          "in_bucket": 0,
+          "leaked": 67,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 12.6,
+          "in_bucket": 0,
+          "leaked": 67,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 12.7,
+          "in_bucket": 0,
+          "leaked": 68,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.8,
+          "in_bucket": 0,
+          "leaked": 69,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.9,
+          "in_bucket": 0,
+          "leaked": 70,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.0,
+          "in_bucket": 0,
+          "leaked": 70,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 13.1,
+          "in_bucket": 0,
+          "leaked": 70,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 13.2,
+          "in_bucket": 0,
+          "leaked": 71,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.3,
+          "in_bucket": 0,
+          "leaked": 72,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.4,
+          "in_bucket": 0,
+          "leaked": 72,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 13.5,
+          "in_bucket": 0,
+          "leaked": 72,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 13.6,
+          "in_bucket": 0,
+          "leaked": 72,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 13.7,
+          "in_bucket": 0,
+          "leaked": 73,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.8,
+          "in_bucket": 0,
+          "leaked": 74,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.9,
+          "in_bucket": 0,
+          "leaked": 74,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 14.0,
+          "in_bucket": 0,
+          "leaked": 74,
+          "dropped": 102,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 14.1,
+          "in_bucket": 3,
+          "leaked": 75,
+          "dropped": 102,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.2,
+          "in_bucket": 4,
+          "leaked": 76,
+          "dropped": 104,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.3,
+          "in_bucket": 4,
+          "leaked": 77,
+          "dropped": 107,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.4,
+          "in_bucket": 4,
+          "leaked": 78,
+          "dropped": 110,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.5,
+          "in_bucket": 4,
+          "leaked": 79,
+          "dropped": 113,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.6,
+          "in_bucket": 4,
+          "leaked": 80,
+          "dropped": 116,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.7,
+          "in_bucket": 4,
+          "leaked": 81,
+          "dropped": 119,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.8,
+          "in_bucket": 4,
+          "leaked": 82,
+          "dropped": 122,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.9,
+          "in_bucket": 4,
+          "leaked": 83,
+          "dropped": 125,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.0,
+          "in_bucket": 4,
+          "leaked": 84,
+          "dropped": 128,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.1,
+          "in_bucket": 4,
+          "leaked": 85,
+          "dropped": 131,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.2,
+          "in_bucket": 4,
+          "leaked": 86,
+          "dropped": 134,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.3,
+          "in_bucket": 4,
+          "leaked": 87,
+          "dropped": 137,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.4,
+          "in_bucket": 4,
+          "leaked": 88,
+          "dropped": 140,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.5,
+          "in_bucket": 4,
+          "leaked": 89,
+          "dropped": 143,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.6,
+          "in_bucket": 3,
+          "leaked": 90,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.7,
+          "in_bucket": 2,
+          "leaked": 91,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.8,
+          "in_bucket": 1,
+          "leaked": 92,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.9,
+          "in_bucket": 0,
+          "leaked": 93,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.0,
+          "in_bucket": 0,
+          "leaked": 93,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.1,
+          "in_bucket": 0,
+          "leaked": 93,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.2,
+          "in_bucket": 0,
+          "leaked": 93,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.3,
+          "in_bucket": 0,
+          "leaked": 94,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.4,
+          "in_bucket": 0,
+          "leaked": 95,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.5,
+          "in_bucket": 0,
+          "leaked": 95,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.6,
+          "in_bucket": 0,
+          "leaked": 95,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.7,
+          "in_bucket": 0,
+          "leaked": 95,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.8,
+          "in_bucket": 0,
+          "leaked": 95,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 16.9,
+          "in_bucket": 0,
+          "leaked": 95,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.0,
+          "in_bucket": 0,
+          "leaked": 96,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.1,
+          "in_bucket": 0,
+          "leaked": 96,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.2,
+          "in_bucket": 0,
+          "leaked": 96,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.3,
+          "in_bucket": 0,
+          "leaked": 97,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.4,
+          "in_bucket": 0,
+          "leaked": 98,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.5,
+          "in_bucket": 0,
+          "leaked": 98,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.6,
+          "in_bucket": 0,
+          "leaked": 98,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.7,
+          "in_bucket": 0,
+          "leaked": 98,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.8,
+          "in_bucket": 0,
+          "leaked": 98,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 17.9,
+          "in_bucket": 0,
+          "leaked": 98,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.0,
+          "in_bucket": 0,
+          "leaked": 99,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.1,
+          "in_bucket": 0,
+          "leaked": 99,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.2,
+          "in_bucket": 0,
+          "leaked": 100,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.3,
+          "in_bucket": 0,
+          "leaked": 100,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.4,
+          "in_bucket": 0,
+          "leaked": 100,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.5,
+          "in_bucket": 0,
+          "leaked": 100,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.6,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.7,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.8,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 18.9,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.0,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.1,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.2,
+          "in_bucket": 0,
+          "leaked": 101,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.3,
+          "in_bucket": 0,
+          "leaked": 102,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.4,
+          "in_bucket": 0,
+          "leaked": 102,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.5,
+          "in_bucket": 0,
+          "leaked": 103,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.6,
+          "in_bucket": 0,
+          "leaked": 103,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.7,
+          "in_bucket": 0,
+          "leaked": 103,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 19.8,
+          "in_bucket": 0,
+          "leaked": 104,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.9,
+          "in_bucket": 0,
+          "leaked": 105,
+          "dropped": 143,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        }
+      ]
+    },
+    "with_lb": {
+      "total_arrived": 248,
+      "total_leaked": 183,
+      "total_dropped": 48,
+      "drop_rate_pct": 19.35,
+      "output_efficiency": 73.79,
+      "timeline": [
+        {
+          "t": 0.0,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.1,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.2,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.3,
+          "in_bucket": 0,
+          "leaked": 0,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.4,
+          "in_bucket": 0,
+          "leaked": 1,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 0.5,
+          "in_bucket": 0,
+          "leaked": 1,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.6,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 0.7,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.8,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 0.9,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.0,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.1,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.2,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.3,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.4,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.5,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.6,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.7,
+          "in_bucket": 0,
+          "leaked": 2,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 1.8,
+          "in_bucket": 0,
+          "leaked": 3,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 1.9,
+          "in_bucket": 0,
+          "leaked": 3,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 0.0
+        },
+        {
+          "t": 2.0,
+          "in_bucket": 2,
+          "leaked": 4,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.1,
+          "in_bucket": 4,
+          "leaked": 5,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.2,
+          "in_bucket": 6,
+          "leaked": 6,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.3,
+          "in_bucket": 8,
+          "leaked": 7,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.4,
+          "in_bucket": 10,
+          "leaked": 8,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.5,
+          "in_bucket": 12,
+          "leaked": 9,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.6,
+          "in_bucket": 14,
+          "leaked": 10,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.7,
+          "in_bucket": 16,
+          "leaked": 11,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.8,
+          "in_bucket": 18,
+          "leaked": 12,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 2.9,
+          "in_bucket": 20,
+          "leaked": 13,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.0,
+          "in_bucket": 22,
+          "leaked": 14,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.1,
+          "in_bucket": 24,
+          "leaked": 15,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.2,
+          "in_bucket": 26,
+          "leaked": 16,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.3,
+          "in_bucket": 28,
+          "leaked": 17,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.4,
+          "in_bucket": 30,
+          "leaked": 18,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.5,
+          "in_bucket": 32,
+          "leaked": 19,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.6,
+          "in_bucket": 34,
+          "leaked": 20,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.7,
+          "in_bucket": 36,
+          "leaked": 21,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.8,
+          "in_bucket": 38,
+          "leaked": 22,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 3.9,
+          "in_bucket": 40,
+          "leaked": 23,
+          "dropped": 0,
+          "arrival_rate": 35.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.0,
+          "in_bucket": 40,
+          "leaked": 24,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.1,
+          "in_bucket": 39,
+          "leaked": 25,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.2,
+          "in_bucket": 38,
+          "leaked": 26,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.3,
+          "in_bucket": 37,
+          "leaked": 27,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.4,
+          "in_bucket": 36,
+          "leaked": 28,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.5,
+          "in_bucket": 35,
+          "leaked": 29,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.6,
+          "in_bucket": 34,
+          "leaked": 30,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.7,
+          "in_bucket": 33,
+          "leaked": 31,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.8,
+          "in_bucket": 32,
+          "leaked": 32,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 4.9,
+          "in_bucket": 31,
+          "leaked": 33,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.0,
+          "in_bucket": 30,
+          "leaked": 34,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.1,
+          "in_bucket": 29,
+          "leaked": 35,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.2,
+          "in_bucket": 28,
+          "leaked": 36,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.3,
+          "in_bucket": 28,
+          "leaked": 37,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.4,
+          "in_bucket": 27,
+          "leaked": 38,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.5,
+          "in_bucket": 26,
+          "leaked": 39,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.6,
+          "in_bucket": 25,
+          "leaked": 40,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.7,
+          "in_bucket": 25,
+          "leaked": 41,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.8,
+          "in_bucket": 24,
+          "leaked": 42,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 5.9,
+          "in_bucket": 23,
+          "leaked": 43,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.0,
+          "in_bucket": 23,
+          "leaked": 44,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.1,
+          "in_bucket": 22,
+          "leaked": 45,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.2,
+          "in_bucket": 21,
+          "leaked": 46,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.3,
+          "in_bucket": 20,
+          "leaked": 47,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.4,
+          "in_bucket": 20,
+          "leaked": 48,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.5,
+          "in_bucket": 20,
+          "leaked": 49,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.6,
+          "in_bucket": 19,
+          "leaked": 50,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.7,
+          "in_bucket": 18,
+          "leaked": 51,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.8,
+          "in_bucket": 17,
+          "leaked": 52,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 6.9,
+          "in_bucket": 16,
+          "leaked": 53,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.0,
+          "in_bucket": 15,
+          "leaked": 54,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.1,
+          "in_bucket": 15,
+          "leaked": 55,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.2,
+          "in_bucket": 15,
+          "leaked": 56,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.3,
+          "in_bucket": 14,
+          "leaked": 57,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.4,
+          "in_bucket": 13,
+          "leaked": 58,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.5,
+          "in_bucket": 12,
+          "leaked": 59,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.6,
+          "in_bucket": 12,
+          "leaked": 60,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.7,
+          "in_bucket": 11,
+          "leaked": 61,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.8,
+          "in_bucket": 10,
+          "leaked": 62,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 7.9,
+          "in_bucket": 9,
+          "leaked": 63,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.0,
+          "in_bucket": 8,
+          "leaked": 64,
+          "dropped": 0,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.1,
+          "in_bucket": 11,
+          "leaked": 65,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.2,
+          "in_bucket": 15,
+          "leaked": 66,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.3,
+          "in_bucket": 19,
+          "leaked": 67,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.4,
+          "in_bucket": 22,
+          "leaked": 68,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.5,
+          "in_bucket": 25,
+          "leaked": 69,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.6,
+          "in_bucket": 29,
+          "leaked": 70,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.7,
+          "in_bucket": 33,
+          "leaked": 71,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.8,
+          "in_bucket": 36,
+          "leaked": 72,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 8.9,
+          "in_bucket": 39,
+          "leaked": 73,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.0,
+          "in_bucket": 42,
+          "leaked": 74,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.1,
+          "in_bucket": 46,
+          "leaked": 75,
+          "dropped": 0,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.2,
+          "in_bucket": 49,
+          "leaked": 76,
+          "dropped": 1,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.3,
+          "in_bucket": 49,
+          "leaked": 77,
+          "dropped": 4,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.4,
+          "in_bucket": 49,
+          "leaked": 78,
+          "dropped": 7,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.5,
+          "in_bucket": 49,
+          "leaked": 79,
+          "dropped": 10,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.6,
+          "in_bucket": 49,
+          "leaked": 80,
+          "dropped": 14,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.7,
+          "in_bucket": 49,
+          "leaked": 81,
+          "dropped": 18,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.8,
+          "in_bucket": 49,
+          "leaked": 82,
+          "dropped": 22,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 9.9,
+          "in_bucket": 49,
+          "leaked": 83,
+          "dropped": 26,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.0,
+          "in_bucket": 49,
+          "leaked": 84,
+          "dropped": 29,
+          "arrival_rate": 50.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.1,
+          "in_bucket": 49,
+          "leaked": 85,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.2,
+          "in_bucket": 48,
+          "leaked": 86,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.3,
+          "in_bucket": 47,
+          "leaked": 87,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.4,
+          "in_bucket": 46,
+          "leaked": 88,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.5,
+          "in_bucket": 45,
+          "leaked": 89,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.6,
+          "in_bucket": 44,
+          "leaked": 90,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.7,
+          "in_bucket": 43,
+          "leaked": 91,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.8,
+          "in_bucket": 42,
+          "leaked": 92,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 10.9,
+          "in_bucket": 42,
+          "leaked": 93,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.0,
+          "in_bucket": 42,
+          "leaked": 94,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.1,
+          "in_bucket": 41,
+          "leaked": 95,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.2,
+          "in_bucket": 40,
+          "leaked": 96,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.3,
+          "in_bucket": 39,
+          "leaked": 97,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.4,
+          "in_bucket": 39,
+          "leaked": 98,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.5,
+          "in_bucket": 39,
+          "leaked": 99,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.6,
+          "in_bucket": 38,
+          "leaked": 100,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.7,
+          "in_bucket": 37,
+          "leaked": 101,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.8,
+          "in_bucket": 36,
+          "leaked": 102,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 11.9,
+          "in_bucket": 35,
+          "leaked": 103,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.0,
+          "in_bucket": 35,
+          "leaked": 104,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.1,
+          "in_bucket": 34,
+          "leaked": 105,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.2,
+          "in_bucket": 34,
+          "leaked": 106,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.3,
+          "in_bucket": 33,
+          "leaked": 107,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.4,
+          "in_bucket": 32,
+          "leaked": 108,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.5,
+          "in_bucket": 31,
+          "leaked": 109,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.6,
+          "in_bucket": 30,
+          "leaked": 110,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.7,
+          "in_bucket": 30,
+          "leaked": 111,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.8,
+          "in_bucket": 30,
+          "leaked": 112,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 12.9,
+          "in_bucket": 30,
+          "leaked": 113,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.0,
+          "in_bucket": 29,
+          "leaked": 114,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.1,
+          "in_bucket": 28,
+          "leaked": 115,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.2,
+          "in_bucket": 28,
+          "leaked": 116,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.3,
+          "in_bucket": 28,
+          "leaked": 117,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.4,
+          "in_bucket": 27,
+          "leaked": 118,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.5,
+          "in_bucket": 26,
+          "leaked": 119,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.6,
+          "in_bucket": 25,
+          "leaked": 120,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.7,
+          "in_bucket": 25,
+          "leaked": 121,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.8,
+          "in_bucket": 25,
+          "leaked": 122,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 13.9,
+          "in_bucket": 24,
+          "leaked": 123,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.0,
+          "in_bucket": 23,
+          "leaked": 124,
+          "dropped": 29,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.1,
+          "in_bucket": 26,
+          "leaked": 125,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.2,
+          "in_bucket": 29,
+          "leaked": 126,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.3,
+          "in_bucket": 32,
+          "leaked": 127,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.4,
+          "in_bucket": 35,
+          "leaked": 128,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.5,
+          "in_bucket": 38,
+          "leaked": 129,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.6,
+          "in_bucket": 41,
+          "leaked": 130,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.7,
+          "in_bucket": 44,
+          "leaked": 131,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.8,
+          "in_bucket": 47,
+          "leaked": 132,
+          "dropped": 29,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 14.9,
+          "in_bucket": 49,
+          "leaked": 133,
+          "dropped": 30,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.0,
+          "in_bucket": 49,
+          "leaked": 134,
+          "dropped": 33,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.1,
+          "in_bucket": 49,
+          "leaked": 135,
+          "dropped": 36,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.2,
+          "in_bucket": 49,
+          "leaked": 136,
+          "dropped": 39,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.3,
+          "in_bucket": 49,
+          "leaked": 137,
+          "dropped": 42,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.4,
+          "in_bucket": 49,
+          "leaked": 138,
+          "dropped": 45,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.5,
+          "in_bucket": 49,
+          "leaked": 139,
+          "dropped": 48,
+          "arrival_rate": 45.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.6,
+          "in_bucket": 48,
+          "leaked": 140,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.7,
+          "in_bucket": 47,
+          "leaked": 141,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.8,
+          "in_bucket": 46,
+          "leaked": 142,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 15.9,
+          "in_bucket": 45,
+          "leaked": 143,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.0,
+          "in_bucket": 44,
+          "leaked": 144,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.1,
+          "in_bucket": 43,
+          "leaked": 145,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.2,
+          "in_bucket": 42,
+          "leaked": 146,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.3,
+          "in_bucket": 42,
+          "leaked": 147,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.4,
+          "in_bucket": 42,
+          "leaked": 148,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.5,
+          "in_bucket": 41,
+          "leaked": 149,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.6,
+          "in_bucket": 40,
+          "leaked": 150,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.7,
+          "in_bucket": 39,
+          "leaked": 151,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.8,
+          "in_bucket": 38,
+          "leaked": 152,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 16.9,
+          "in_bucket": 37,
+          "leaked": 153,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.0,
+          "in_bucket": 37,
+          "leaked": 154,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.1,
+          "in_bucket": 36,
+          "leaked": 155,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.2,
+          "in_bucket": 35,
+          "leaked": 156,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.3,
+          "in_bucket": 35,
+          "leaked": 157,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.4,
+          "in_bucket": 35,
+          "leaked": 158,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.5,
+          "in_bucket": 34,
+          "leaked": 159,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.6,
+          "in_bucket": 33,
+          "leaked": 160,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.7,
+          "in_bucket": 32,
+          "leaked": 161,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.8,
+          "in_bucket": 31,
+          "leaked": 162,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 17.9,
+          "in_bucket": 30,
+          "leaked": 163,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.0,
+          "in_bucket": 30,
+          "leaked": 164,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.1,
+          "in_bucket": 29,
+          "leaked": 165,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.2,
+          "in_bucket": 29,
+          "leaked": 166,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.3,
+          "in_bucket": 28,
+          "leaked": 167,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.4,
+          "in_bucket": 27,
+          "leaked": 168,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.5,
+          "in_bucket": 26,
+          "leaked": 169,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.6,
+          "in_bucket": 26,
+          "leaked": 170,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.7,
+          "in_bucket": 25,
+          "leaked": 171,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.8,
+          "in_bucket": 24,
+          "leaked": 172,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 18.9,
+          "in_bucket": 23,
+          "leaked": 173,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.0,
+          "in_bucket": 22,
+          "leaked": 174,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.1,
+          "in_bucket": 21,
+          "leaked": 175,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.2,
+          "in_bucket": 20,
+          "leaked": 176,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.3,
+          "in_bucket": 20,
+          "leaked": 177,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.4,
+          "in_bucket": 19,
+          "leaked": 178,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.5,
+          "in_bucket": 19,
+          "leaked": 179,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.6,
+          "in_bucket": 18,
+          "leaked": 180,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.7,
+          "in_bucket": 17,
+          "leaked": 181,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.8,
+          "in_bucket": 17,
+          "leaked": 182,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        },
+        {
+          "t": 19.9,
+          "in_bucket": 17,
+          "leaked": 183,
+          "dropped": 48,
+          "arrival_rate": 8.0,
+          "output_rate": 10.0
+        }
+      ]
+    },
+    "capacity_analysis": {
+      "capacities": [
+        5,
+        10,
+        20,
+        30,
+        50,
+        75,
+        100
+      ],
+      "drop_rates": [
+        57.66,
+        51.61,
+        39.52,
+        28.63,
+        19.35,
+        9.27,
+        0.0
+      ],
+      "efficiencies": [
+        42.34,
+        48.39,
+        60.48,
+        71.37,
+        73.79,
+        73.79,
+        73.79
+      ]
+    }
+  }
+}
