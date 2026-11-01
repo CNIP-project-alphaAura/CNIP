@@ -1,3 +1,258 @@
+
+/* ====================================================================
+   7. REALISTIC NETWORK DEVICE TOPOLOGY ANIMATION & CONTROLS
+   ==================================================================== */
+let topoSelectedUsers = 10;
+let topoPacketAnimRunning = true;
+let topoPacketId = 0;
+
+function updateTopologyState(users) {
+  topoSelectedUsers = parseInt(users);
+
+  // Sync button active states
+  document.querySelectorAll('#topo-users-pills .pill-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.getAttribute('data-topo-users')) === topoSelectedUsers);
+  });
+
+  // Sync with simulation selector if present
+  document.querySelectorAll('#user-count-pills .pill-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.getAttribute('data-users')) === topoSelectedUsers);
+  });
+  currentUsers = topoSelectedUsers;
+  updateSimulationResults();
+
+  // Update HUD elements
+  const countEl = document.getElementById('topo-connected-count');
+  const badgeEl = document.getElementById('svg-student-badge');
+  const queueEl = document.getElementById('topo-queue-status');
+  const linkStatusEl = document.getElementById('topo-link-status');
+  const alertEl = document.getElementById('topo-congest-alert');
+  const bottleneckCable = document.getElementById('path-sw-rtr');
+  const rtrQueueBar = document.getElementById('rtr-queue-bar');
+  const rtrLossLed = document.getElementById('rtr-loss-led');
+
+  if (countEl) countEl.textContent = `${topoSelectedUsers} Connected Devices`;
+  if (badgeEl) badgeEl.textContent = `+${topoSelectedUsers - 3} more devices`;
+
+  if (topoSelectedUsers === 10) {
+    if (queueEl) queueEl.textContent = "12 / 50 pkts";
+    if (rtrQueueBar) { rtrQueueBar.setAttribute('width', '14'); rtrQueueBar.setAttribute('fill', '#10b981'); }
+    if (linkStatusEl) { linkStatusEl.textContent = "🟢 Normal Flow"; linkStatusEl.className = "hud-val text-success"; }
+    if (alertEl) {
+      alertEl.innerHTML = "🟢 <strong>Link Status:</strong> Low student load. Router queue buffer is healthy with <strong>0% packet loss</strong>.";
+      alertEl.className = "congest-alert-box";
+    }
+    if (bottleneckCable) bottleneckCable.classList.remove('congested');
+    if (rtrLossLed) rtrLossLed.style.display = 'none';
+  } else if (topoSelectedUsers === 50) {
+    if (queueEl) queueEl.textContent = "38 / 50 pkts (Warning)";
+    if (rtrQueueBar) { rtrQueueBar.setAttribute('width', '38'); rtrQueueBar.setAttribute('fill', '#f59e0b'); }
+    if (linkStatusEl) { linkStatusEl.textContent = "🟡 Buffer Near Full"; linkStatusEl.className = "hud-val text-warning"; }
+    if (alertEl) {
+      alertEl.innerHTML = "🟡 <strong>Congestion Warning:</strong> 50 students streaming lectures. Router buffer occupancy high; <strong>~5.5% packet loss</strong> observed.";
+      alertEl.className = "congest-alert-box";
+    }
+    if (bottleneckCable) bottleneckCable.classList.add('congested');
+    if (rtrLossLed) rtrLossLed.style.display = 'block';
+  } else {
+    // 100 users
+    if (queueEl) queueEl.textContent = "50 / 50 pkts (FULL!)";
+    if (rtrQueueBar) { rtrQueueBar.setAttribute('width', '50'); rtrQueueBar.setAttribute('fill', '#ef4444'); }
+    if (linkStatusEl) { linkStatusEl.textContent = "🔴 Congestion Overload"; linkStatusEl.className = "hud-val text-danger"; }
+    if (alertEl) {
+      alertEl.innerHTML = "🔴 <strong>Severe Congestion:</strong> 100 concurrent students! Bottleneck link saturated, queue overflowing, <strong>>17% packets dropped</strong>!";
+      alertEl.className = "congest-alert-box congested";
+    }
+    if (bottleneckCable) bottleneckCable.classList.add('congested');
+    if (rtrLossLed) rtrLossLed.style.display = 'block';
+  }
+}
+
+// Device Flash on packet transit
+function flashDevice(id, isCongested = false) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const cls = isCongested ? 'device-highlight-congested' : 'device-highlight';
+  el.classList.add(cls);
+  setTimeout(() => el.classList.remove(cls), 280);
+}
+
+// Animated Packet Flight in SVG
+function spawnTopologyPacket() {
+  const layer = document.getElementById('network-packets-layer');
+  if (!layer || !topoPacketAnimRunning) return;
+
+  const startNodes = [
+    { name: "Laptop 1", proto: "TCP", color: "#38bdf8", y: 90 },
+    { name: "Laptop 2", proto: "UDP", color: "#f43f5e", y: 210 },
+    { name: "Laptop 3", proto: "TCP", color: "#34d399", y: 330 }
+  ];
+
+  const source = startNodes[Math.floor(Math.random() * startNodes.length)];
+  const isCongested = topoSelectedUsers === 100;
+  const isMedium = topoSelectedUsers === 50;
+  const willDrop = (isCongested && Math.random() < 0.38) || (isMedium && Math.random() < 0.12);
+
+  // SVG Packet Element
+  const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  g.setAttribute("class", "svg-data-packet");
+
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect.setAttribute("x", "-18");
+  rect.setAttribute("y", "-9");
+  rect.setAttribute("width", "36");
+  rect.setAttribute("height", "18");
+  rect.setAttribute("rx", "4");
+  rect.setAttribute("fill", source.color);
+  rect.setAttribute("stroke", "#ffffff");
+  rect.setAttribute("stroke-width", "1");
+
+  const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  text.setAttribute("x", "0");
+  text.setAttribute("y", "4");
+  text.setAttribute("text-anchor", "middle");
+  text.setAttribute("fill", "#ffffff");
+  text.setAttribute("font-size", "9");
+  text.setAttribute("font-weight", "bold");
+  text.textContent = source.proto + " ➔";
+
+  g.appendChild(rect);
+  g.appendChild(text);
+  layer.appendChild(g);
+
+  // Coordinates along link:
+  // 1. Source (110, y) -> AP (280, 210)
+  // 2. AP (280, 210) -> Switch (435, 210)
+  // 3. Switch (435, 210) -> Router (615, 210) [BOTTLENECK]
+  // 4. Router (615, 210) -> Cloud (790, 210)
+  // 5. Cloud (790, 210) -> Server (930, 210)
+
+  let startTime = performance.now();
+  const totalDuration = 2200; // ms
+
+  function animate(now) {
+    let elapsed = now - startTime;
+    let t = elapsed / totalDuration;
+
+    if (t > 1) {
+      // Arrived at University Server!
+      flashDevice('srv-body');
+      g.remove();
+      // Send ACK back
+      spawnAckPacket();
+      return;
+    }
+
+    let x, y;
+    if (t < 0.22) {
+      // Laptop to AP
+      let subT = t / 0.22;
+      x = 110 + subT * (280 - 110);
+      y = source.y + subT * (210 - source.y);
+      if (subT > 0.95) flashDevice('ap-body');
+    } else if (t < 0.42) {
+      // AP to Switch
+      let subT = (t - 0.22) / 0.20;
+      x = 280 + subT * (435 - 280);
+      y = 210;
+      if (subT > 0.95) flashDevice('sw-body');
+    } else if (t < 0.65) {
+      // Switch to Gateway Router (Bottleneck link)
+      let subT = (t - 0.42) / 0.23;
+      x = 435 + subT * (615 - 435);
+      y = 210;
+
+      if (subT > 0.85) {
+        flashDevice('rtr-body', willDrop);
+        if (willDrop) {
+          // Packet Dropped at Router!
+          rect.setAttribute("fill", "#ef4444");
+          text.textContent = "DROP ✕";
+          // Drop animation (fall down out of cable)
+          let dropY = 210 + (subT - 0.85) * 60;
+          g.setAttribute("transform", `translate(${x}, ${dropY})`);
+          setTimeout(() => g.remove(), 250);
+          return;
+        }
+      }
+    } else if (t < 0.82) {
+      // Router to Cloud
+      let subT = (t - 0.65) / 0.17;
+      x = 615 + subT * (790 - 615);
+      y = 210;
+      if (subT > 0.95) flashDevice('cloud-body');
+    } else {
+      // Cloud to Server
+      let subT = (t - 0.82) / 0.18;
+      x = 790 + subT * (930 - 790);
+      y = 210;
+    }
+
+    g.setAttribute("transform", `translate(${x}, ${y})`);
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+// Return ACK from Server to Students
+function spawnAckPacket() {
+  const layer = document.getElementById('network-packets-layer');
+  if (!layer || !topoPacketAnimRunning) return;
+
+  const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  g.setAttribute("class", "svg-data-packet");
+
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect.setAttribute("x", "-16");
+  rect.setAttribute("y", "-7");
+  rect.setAttribute("width", "32");
+  rect.setAttribute("height", "14");
+  rect.setAttribute("rx", "3");
+  rect.setAttribute("fill", "#10b981");
+
+  const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  text.setAttribute("x", "0");
+  text.setAttribute("y", "3");
+  text.setAttribute("text-anchor", "middle");
+  text.setAttribute("fill", "#ffffff");
+  text.setAttribute("font-size", "8");
+  text.setAttribute("font-weight", "bold");
+  text.textContent = "⬅ ACK";
+
+  g.appendChild(rect);
+  g.appendChild(text);
+  layer.appendChild(g);
+
+  let startTime = performance.now();
+  const duration = 1800;
+
+  function animateAck(now) {
+    let t = (now - startTime) / duration;
+    if (t > 1) {
+      g.remove();
+      return;
+    }
+
+    // Return from Server (930, 210) back to Students (110, 210)
+    let x = 930 - t * (930 - 110);
+    let y = 210 + Math.sin(t * Math.PI) * -15; // slightly offset vertically
+
+    g.setAttribute("transform", `translate(${x}, ${y})`);
+    requestAnimationFrame(animateAck);
+  }
+
+  requestAnimationFrame(animateAck);
+}
+
+// Start packet generation loop based on student load
+function startTopologyLoop() {
+  setInterval(() => {
+    if (!topoPacketAnimRunning) return;
+    spawnTopologyPacket();
+  }, topoSelectedUsers === 10 ? 800 : topoSelectedUsers === 50 ? 450 : 250);
+}
+
 /**
  * ====================================================================
  * E-Learning Network Performance Simulator & Interactive Dashboard
@@ -117,6 +372,17 @@ function runSimulation() {
       clearInterval(interval);
       statusText.textContent = `Simulation complete! NS-2 trace generated and metrics extracted.`;
       updateSimulationResults();
+
+  // Topology user pills
+  document.querySelectorAll('#topo-users-pills .pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const u = btn.getAttribute('data-topo-users');
+      updateTopologyState(u);
+    });
+  });
+  updateTopologyState(10);
+  startTopologyLoop();
+
       launchPacketPipeAnimation();
       setTimeout(() => { statusBox.style.display = 'none'; }, 2200);
     }
@@ -438,6 +704,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       currentUsers = parseInt(btn.getAttribute('data-users'));
       updateSimulationResults();
+
+  // Topology user pills
+  document.querySelectorAll('#topo-users-pills .pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const u = btn.getAttribute('data-topo-users');
+      updateTopologyState(u);
+    });
+  });
+  updateTopologyState(10);
+  startTopologyLoop();
+
     });
   });
 
@@ -447,6 +724,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       currentProtocol = btn.getAttribute('data-proto');
       updateSimulationResults();
+
+  // Topology user pills
+  document.querySelectorAll('#topo-users-pills .pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const u = btn.getAttribute('data-topo-users');
+      updateTopologyState(u);
+    });
+  });
+  updateTopologyState(10);
+  startTopologyLoop();
+
     });
   });
 
@@ -481,6 +769,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial Renders
   updateSimulationResults();
+
+  // Topology user pills
+  document.querySelectorAll('#topo-users-pills .pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const u = btn.getAttribute('data-topo-users');
+      updateTopologyState(u);
+    });
+  });
+  updateTopologyState(10);
+  startTopologyLoop();
+
   renderSlidingWindow();
   renderGBN();
   updateLeakyBucketUI();
