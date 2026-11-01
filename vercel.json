@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/web_dashboard/",
+      "permanent": false
+    }
+  ]
+}
