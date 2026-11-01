@@ -38,15 +38,14 @@
 
     <!-- 1. HOME -->
     <section id="home" class="tab-section active">
-      <div class="hero-banner">
-        <span class="badge">📡 NetTrack NS-2 Simulator</span>
-        <h1>University E-Learning Network Performance</h1>
-        <p class="hero-desc">
-          How campus internet handles <strong>10, 50, and 100 students</strong> on LMS, Video, Exams, and Portals.
-        </p>
-        <div class="hero-actions">
-          <a href="#simulation" class="btn btn-primary" onclick="switchTab('simulation')">⚡ Run Simulation</a>
-          <a href="#graphs" class="btn btn-secondary" onclick="switchTab('graphs')">📊 View Graphs</a>
+      <div class="home-header">
+        <div>
+          <h1>Performance Overview</h1>
+          <p class="text-muted">Campus network status for 10, 50, and 100 students</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="switchTab('simulation')">⚡ Run Simulation</button>
+          <button class="btn btn-secondary" onclick="switchTab('topology')">🗺️ Topology</button>
         </div>
       </div>
 
