@@ -218,7 +218,7 @@ class SyntheticTraceGenerator:
 
     SCENARIOS = {
         "low":    {"users": 10,  "data_rate_mbps": 0.5,  "loss_prob": 0.005},
-        "medium": {"users": 30,  "data_rate_mbps": 2.0,  "loss_prob": 0.035},
+        "medium": {"users": 50,  "data_rate_mbps": 2.5,  "loss_prob": 0.045},
         "high":   {"users": 100, "data_rate_mbps": 8.0,  "loss_prob": 0.125},
     }
 

@@ -25,7 +25,7 @@ def load_json(filepath):
 # -------------------------------------------------------------
 def plot_throughput(data):
     scenarios = ["low", "medium", "high"]
-    labels = ["Low (10 users)", "Medium (30 users)", "High (100 users)"]
+    labels = ["Low (10 users)", "Medium (50 users)", "High (100 users)"]
     
     tcp_tput = [data[s]["TCP"]["throughput_kbps"] for s in scenarios]
     udp_tput = [data[s]["UDP"]["throughput_kbps"] for s in scenarios]
@@ -124,7 +124,7 @@ def plot_packet_loss(data):
 # -------------------------------------------------------------
 def plot_pdr(data):
     scenarios = ["low", "medium", "high"]
-    labels = ["Low (10 users)", "Medium (30 users)", "High (100 users)"]
+    labels = ["Low (10 users)", "Medium (50 users)", "High (100 users)"]
 
     tcp_pdr = [data[s]["TCP"]["pdr_percent"] for s in scenarios]
     udp_pdr = [data[s]["UDP"]["pdr_percent"] for s in scenarios]

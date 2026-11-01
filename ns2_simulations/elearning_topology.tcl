@@ -16,7 +16,7 @@
 #
 # Traffic Loads:
 #   - Low: 10 students
-#   - Medium: 30 students
+#   - Medium: 50 students
 #   - High: 100 students
 # ====================================================================
 
@@ -35,7 +35,7 @@ $ns namtrace-all $namfile
 
 # --------------------------------------------------------------------
 # 1. Traffic Load Configuration
-# Change 'num_students' to 10 (Low), 30 (Medium), or 100 (High)
+# Change 'num_students' to 10 (Low), 50 (Medium), or 100 (High)
 # --------------------------------------------------------------------
 set num_students 10
 if {$argc > 0} {

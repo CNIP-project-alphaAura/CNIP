@@ -51,7 +51,7 @@ def run_protocol_comparison() -> Dict:
 
     scenarios = {
         "low":    {"users": 10,  "label": "Low (10 users)"},
-        "medium": {"users": 30,  "label": "Medium (30 users)"},
+        "medium": {"users": 50,  "label": "Medium (50 users)"},
         "high":   {"users": 100, "label": "High (100 users)"},
     }
     protocols = ["TCP", "UDP"]

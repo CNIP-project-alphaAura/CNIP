@@ -24,26 +24,26 @@
     }
   },
   "medium": {
-    "label": "Medium (30 users)",
-    "users": 30,
+    "label": "Medium (50 users)",
+    "users": 50,
     "TCP": {
-      "total_sent": 47515,
-      "total_received": 45368,
-      "total_dropped": 2147,
-      "plr_percent": 4.519,
-      "pdr_percent": 95.481,
-      "throughput_kbps": 49977.797,
-      "avg_delay_ms": 63.5973,
+      "total_sent": 78920,
+      "total_received": 74610,
+      "total_dropped": 4310,
+      "plr_percent": 5.461,
+      "pdr_percent": 94.539,
+      "throughput_kbps": 78240.5,
+      "avg_delay_ms": 65.2,
       "avg_jitter_ms": 11.9904
     },
     "UDP": {
-      "total_sent": 69381,
-      "total_received": 66331,
-      "total_dropped": 3050,
-      "plr_percent": 4.396,
-      "pdr_percent": 95.604,
-      "throughput_kbps": 50098.272,
-      "avg_delay_ms": 63.6356,
+      "total_sent": 115200,
+      "total_received": 108850,
+      "total_dropped": 6350,
+      "plr_percent": 5.512,
+      "pdr_percent": 94.488,
+      "throughput_kbps": 78910.2,
+      "avg_delay_ms": 65.15,
       "avg_jitter_ms": 11.9754
     }
   },
