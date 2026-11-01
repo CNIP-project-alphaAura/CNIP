@@ -42,3 +42,4 @@ public class AlgorithmController {
         return ResponseEntity.ok(algorithmService.getBenchmarks());
     }
 }
+

@@ -18,3 +18,4 @@ public interface SimulationRunRepository extends JpaRepository<SimulationRun, Lo
 
     List<SimulationRun> findTop10ByOrderByCreatedAtDesc();
 }
+

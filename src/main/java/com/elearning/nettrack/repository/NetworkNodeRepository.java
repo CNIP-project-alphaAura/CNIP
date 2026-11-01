@@ -11,3 +11,4 @@ public interface NetworkNodeRepository extends JpaRepository<NetworkNode, Long> 
 
     Optional<NetworkNode> findByNodeKey(String nodeKey);
 }
+

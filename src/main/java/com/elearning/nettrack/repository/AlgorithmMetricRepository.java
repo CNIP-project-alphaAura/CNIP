@@ -13,3 +13,4 @@ public interface AlgorithmMetricRepository extends JpaRepository<AlgorithmMetric
 
     List<AlgorithmMetric> findByAlgorithmTypeOrderByParameterValueAsc(String algorithmType);
 }
+

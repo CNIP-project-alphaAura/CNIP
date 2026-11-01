@@ -26,3 +26,4 @@ public class TopologyController {
         return ResponseEntity.ok(topologyService.getAllNodes());
     }
 }
+
