@@ -2,13 +2,195 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/web_dashboard/">
-  <title>University E-Learning Network Performance Analysis</title>
-  <script>
-    window.location.replace("/web_dashboard/");
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Performance Analysis of University E-Learning System (NS-2)</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <p>Redirecting to <a href="/web_dashboard/">E-Learning Dashboard</a>...</p>
+
+  <header class="header">
+    <div class="container">
+      <h1>Network Performance Analysis of a University E-Learning System</h1>
+      <p class="subtitle">Simulation & Performance Study using <strong>NS-2 (Network Simulator 2)</strong>, AWK, and Python</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Problem Statement -->
+    <section class="card">
+      <h2>1. Problem Statement</h2>
+      <p>
+        A university provides online classes, video lectures, a Learning Management System (LMS),
+        a student portal, and an examination portal. A large number of students accessing these
+        services simultaneously can generate heavy network traffic and cause congestion, packet loss,
+        increased delay, and reduced throughput. This project develops a network performance analysis
+        system to study the effect of user load and traffic conditions on e-learning communication.
+      </p>
+    </section>
+
+    <!-- System Implementation -->
+    <section class="card">
+      <h2>2. System Implementation in NS-2</h2>
+      <p>
+        The e-learning server, campus routers, and student nodes are modeled directly in <strong>NS-2</strong>:
+      </p>
+      <ul>
+        <li><strong>E-Learning Server (Node 0):</strong> Hosts the LMS, examination portal, and video streams.</li>
+        <li><strong>Campus Core Router (Node 1):</strong> Acts as the network gateway and bottleneck link.</li>
+        <li><strong>Student Nodes (Nodes 2..N):</strong> Access university services simultaneously under different loads.</li>
+      </ul>
+
+      <h3>Traffic Scenarios & Services:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Protocol</th>
+            <th>Traffic Type</th>
+            <th>Characteristics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Learning Management System (LMS)</td>
+            <td>TCP</td>
+            <td>FTP / File Transfer</td>
+            <td>Reliable delivery, flow control</td>
+          </tr>
+          <tr>
+            <td>Online Examination Portal</td>
+            <td>TCP Reno</td>
+            <td>Critical Data</td>
+            <td>Zero loss tolerance, window-based control</td>
+          </tr>
+          <tr>
+            <td>Video Lectures & Live Classes</td>
+            <td>UDP</td>
+            <td>CBR (Constant Bit Rate)</td>
+            <td>Real-time streaming, delay-sensitive</td>
+          </tr>
+          <tr>
+            <td>Student Portal</td>
+            <td>UDP</td>
+            <td>CBR</td>
+            <td>Lightweight queries & notifications</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>User Load Scenarios:</h3>
+      <ul>
+        <li><strong>Low Traffic:</strong> 10 concurrent students (normal day)</li>
+        <li><strong>Medium Traffic:</strong> 30 concurrent students (peak lecture hours)</li>
+        <li><strong>High Traffic:</strong> 100 concurrent students (exam submission / registration rush)</li>
+      </ul>
+    </section>
+
+    <!-- Algorithms & Concepts -->
+    <section class="card">
+      <h2>3. Algorithms & Core Concepts</h2>
+      <div class="grid-2">
+        <div class="subcard">
+          <h3>Sliding Window & Go-Back-N ARQ</h3>
+          <p>
+            Implements reliable data transmission for LMS and Exam portals. The sender can transmit
+            up to a window size <em>W</em> frames before waiting for ACKs. If a packet is lost or
+            times out, Go-Back-N retransmits the lost packet and all subsequent packets in the window.
+          </p>
+          <p><strong>Window Sizes Tested:</strong> W = 4, W = 16, W = 64</p>
+        </div>
+
+        <div class="subcard">
+          <h3>Leaky Bucket Traffic Shaping</h3>
+          <p>
+            Video streams generate bursty traffic that causes router queue overflows and packet loss.
+            The Leaky Bucket algorithm buffers incoming bursty packets and releases them into the
+            network at a steady, constant leak rate (e.g., 1 Mbps), eliminating congestion and packet loss.
+          </p>
+          <p><strong>Key Effect:</strong> Converts irregular bursts into a smooth, predictable flow.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance Graphs -->
+    <section class="card">
+      <h2>4. Performance Graphs & Results</h2>
+      <p>Performance charts generated from the NS-2 simulation trace analysis:</p>
+
+      <div class="graphs-grid">
+        <div class="graph-box">
+          <h3>Chart 1: Throughput vs Traffic Load</h3>
+          <img src="outputs/graphs/chart1_throughput_vs_load.png" alt="Throughput vs Load">
+          <p class="caption">Comparison of system throughput between TCP and UDP as student traffic increases.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 2: End-to-End Delay vs User Load</h3>
+          <img src="outputs/graphs/chart2_delay_vs_load.png" alt="Delay vs Load">
+          <p class="caption">Average end-to-end delay (ms) across increasing concurrent student loads.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 3: Packet Loss Rate (PLR %)</h3>
+          <img src="outputs/graphs/chart3_packet_loss_vs_load.png" alt="Packet Loss Rate">
+          <p class="caption">Packet loss rate increases under high user load due to router buffer congestion.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 4: Packet Delivery Ratio (PDR %)</h3>
+          <img src="outputs/graphs/chart4_pdr_comparison.png" alt="Packet Delivery Ratio">
+          <p class="caption">Percentage of transmitted packets successfully delivered to destinations.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 5: Leaky Bucket Traffic Shaping Impact</h3>
+          <img src="outputs/graphs/chart5_leaky_bucket_impact.png" alt="Leaky Bucket Impact">
+          <p class="caption">Comparison of bursty unregulated traffic vs smooth Leaky Bucket output and packet drops.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 6: Go-Back-N Window Size vs Efficiency</h3>
+          <img src="outputs/graphs/chart6_gbn_efficiency.png" alt="GBN Efficiency">
+          <p class="caption">Impact of window size (W) on transmission efficiency and retransmissions under loss.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Run NS-2 & AWK -->
+    <section class="card">
+      <h2>5. How to Run the NS-2 Simulations & AWK Scripts</h2>
+      <div class="code-block">
+        <p><strong># 1. Run NS-2 Simulations (TCL scripts):</strong></p>
+        <code>
+          cd ns2_simulations<br>
+          ns elearning_topology.tcl<br>
+          ns go_back_n.tcl<br>
+          ns leaky_bucket.tcl
+        </code>
+
+        <p style="margin-top: 15px;"><strong># 2. Analyze Trace Files with AWK Scripts:</strong></p>
+        <code>
+          cd ../awk_scripts<br>
+          awk -f throughput.awk ../ns2_simulations/elearning_output.tr<br>
+          awk -f delay.awk ../ns2_simulations/elearning_output.tr<br>
+          awk -f packet_loss.awk ../ns2_simulations/elearning_output.tr
+        </code>
+
+        <p style="margin-top: 15px;"><strong># 3. Generate Performance Charts (Python):</strong></p>
+        <code>
+          python python_engine/generate_charts.py
+        </code>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Computer Networks & Internet Protocols (CNIP) Lab Project &middot; NS-2 Network Simulation</p>
+    </div>
+  </footer>
+
 </body>
 </html>
