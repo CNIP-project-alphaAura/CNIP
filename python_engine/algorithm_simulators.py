@@ -429,7 +429,7 @@ if __name__ == "__main__":
     gbn_path = os.path.join(out_dir, "gbn_simulation.json")
     with open(gbn_path, 'w') as f:
         json.dump(gbn_all, f, indent=2)
-    print(f"  [✓] GBN data saved: {gbn_path}")
+    print(f"  [OK] GBN data saved: {gbn_path}")
 
     # ---- 2. Leaky Bucket Simulation ----
     print("\n[2] Leaky Bucket Traffic Shaper")
@@ -448,7 +448,7 @@ if __name__ == "__main__":
     lb_path = os.path.join(out_dir, "leaky_bucket_simulation.json")
     with open(lb_path, 'w') as f:
         json.dump(lb_result, f, indent=2)
-    print(f"  [✓] Leaky Bucket data saved: {lb_path}")
+    print(f"  [OK] Leaky Bucket data saved: {lb_path}")
 
     # ---- 3. Sliding Window Efficiency Analysis ----
     print("\n[3] Sliding Window Efficiency Analysis")
@@ -462,7 +462,7 @@ if __name__ == "__main__":
         p = float(p_str)
         effs = " | ".join(f"W={w}: {e:.1f}%" for w, e in zip(data["window_sizes"], data["efficiencies"]))
         print(f"    p={p:.2f}: {effs}")
-    print(f"  [✓] Window analysis saved: {sw_path}")
+    print(f"  [OK] Window analysis saved: {sw_path}")
 
-    print("\n  [✓] All algorithm simulations complete!")
-    print("  [✓] Run 'python generate_charts.py' to create performance graphs.")
+    print("\n  [OK] All algorithm simulations complete!")
+    print("  [OK] Run 'python generate_charts.py' to create performance graphs.")

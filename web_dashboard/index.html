@@ -3,715 +3,194 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus · Network Performance Dashboard</title>
-  <meta name="description" content="Network performance dashboard. TCP vs UDP, Go-Back-N, Leaky Bucket simulation via NS-2.">
-  <meta name="keywords" content="NS-2, network simulation, TCP, UDP, Go-Back-N, Leaky Bucket, throughput, packet loss, delay">
-
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- Styles -->
+  <title>Network Performance Analysis of University E-Learning System (NS-2)</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- ============================================================
-     HEADER / NAV
-     ============================================================ -->
-<header class="site-header" role="banner">
-  <div class="header-inner">
-    <a href="#" class="site-logo" aria-label="Nexus Dashboard">
-      <div class="logo-icon" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-        </svg>
-      </div>
-      <div class="logo-text">
-        <span class="logo-title">Nexus</span>
-        <span class="logo-subtitle">Network Simulator</span>
-      </div>
-    </a>
+  <header class="header">
+    <div class="container">
+      <h1>Network Performance Analysis of a University E-Learning System</h1>
+      <p class="subtitle">Simulation & Performance Study using <strong>NS-2 (Network Simulator 2)</strong>, AWK, and Python</p>
+    </div>
+  </header>
 
-    <nav aria-label="Dashboard navigation">
-      <ul class="nav-tabs" role="tablist" id="main-nav">
-        <li class="nav-tab" role="presentation">
-          <a href="#" class="active" role="tab" aria-selected="true"
-             data-panel="panel-overview" id="tab-overview" aria-controls="panel-overview">
-            🏫 Overview
-          </a>
-        </li>
-        <li class="nav-tab" role="presentation">
-          <a href="#" role="tab" aria-selected="false"
-             data-panel="panel-simulation" id="tab-simulation" aria-controls="panel-simulation">
-            📡 Live Simulation
-          </a>
-        </li>
-        <li class="nav-tab" role="presentation">
-          <a href="#" role="tab" aria-selected="false"
-             data-panel="panel-protocol" id="tab-protocol" aria-controls="panel-protocol">
-            ⚡ TCP vs UDP
-          </a>
-        </li>
-        <li class="nav-tab" role="presentation">
-          <a href="#" role="tab" aria-selected="false"
-             data-panel="panel-algorithms" id="tab-algorithms" aria-controls="panel-algorithms">
-            🔁 Algorithms
-          </a>
-        </li>
-        <li class="nav-tab" role="presentation">
-          <a href="#" role="tab" aria-selected="false"
-             data-panel="panel-analytics" id="tab-analytics" aria-controls="panel-analytics">
-            📊 Analytics
-          </a>
-        </li>
+  <main class="container">
+
+    <!-- Problem Statement -->
+    <section class="card">
+      <h2>1. Problem Statement</h2>
+      <p>
+        A university provides online classes, video lectures, a Learning Management System (LMS),
+        a student portal, and an examination portal. A large number of students accessing these
+        services simultaneously can generate heavy network traffic and cause congestion, packet loss,
+        increased delay, and reduced throughput. This project develops a network performance analysis
+        system to study the effect of user load and traffic conditions on e-learning communication.
+      </p>
+    </section>
+
+    <!-- System Implementation -->
+    <section class="card">
+      <h2>2. System Implementation in NS-2</h2>
+      <p>
+        The e-learning server, campus routers, and student nodes are modeled directly in <strong>NS-2</strong>:
+      </p>
+      <ul>
+        <li><strong>E-Learning Server (Node 0):</strong> Hosts the LMS, examination portal, and video streams.</li>
+        <li><strong>Campus Core Router (Node 1):</strong> Acts as the network gateway and bottleneck link.</li>
+        <li><strong>Student Nodes (Nodes 2..N):</strong> Access university services simultaneously under different loads.</li>
       </ul>
-    </nav>
 
-    <div class="header-actions">
-      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle dark/light theme">
-        <span class="toggle-icon" id="theme-icon">🌙</span>
-        <span id="theme-label">Dark</span>
-      </button>
-      <div class="live-status" title="Simulation active">
-        <span class="live-dot"></span>
-        <span class="text-xs text-muted">Live</span>
+      <h3>Traffic Scenarios & Services:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Protocol</th>
+            <th>Traffic Type</th>
+            <th>Characteristics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Learning Management System (LMS)</td>
+            <td>TCP</td>
+            <td>FTP / File Transfer</td>
+            <td>Reliable delivery, flow control</td>
+          </tr>
+          <tr>
+            <td>Online Examination Portal</td>
+            <td>TCP Reno</td>
+            <td>Critical Data</td>
+            <td>Zero loss tolerance, window-based control</td>
+          </tr>
+          <tr>
+            <td>Video Lectures & Live Classes</td>
+            <td>UDP</td>
+            <td>CBR (Constant Bit Rate)</td>
+            <td>Real-time streaming, delay-sensitive</td>
+          </tr>
+          <tr>
+            <td>Student Portal</td>
+            <td>UDP</td>
+            <td>CBR</td>
+            <td>Lightweight queries & notifications</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>User Load Scenarios:</h3>
+      <ul>
+        <li><strong>Low Traffic:</strong> 10 concurrent students (normal day)</li>
+        <li><strong>Medium Traffic:</strong> 30 concurrent students (peak lecture hours)</li>
+        <li><strong>High Traffic:</strong> 100 concurrent students (exam submission / registration rush)</li>
+      </ul>
+    </section>
+
+    <!-- Algorithms & Concepts -->
+    <section class="card">
+      <h2>3. Algorithms & Core Concepts</h2>
+      <div class="grid-2">
+        <div class="subcard">
+          <h3>Sliding Window & Go-Back-N ARQ</h3>
+          <p>
+            Implements reliable data transmission for LMS and Exam portals. The sender can transmit
+            up to a window size <em>W</em> frames before waiting for ACKs. If a packet is lost or
+            times out, Go-Back-N retransmits the lost packet and all subsequent packets in the window.
+          </p>
+          <p><strong>Window Sizes Tested:</strong> W = 4, W = 16, W = 64</p>
+        </div>
+
+        <div class="subcard">
+          <h3>Leaky Bucket Traffic Shaping</h3>
+          <p>
+            Video streams generate bursty traffic that causes router queue overflows and packet loss.
+            The Leaky Bucket algorithm buffers incoming bursty packets and releases them into the
+            network at a steady, constant leak rate (e.g., 1 Mbps), eliminating congestion and packet loss.
+          </p>
+          <p><strong>Key Effect:</strong> Converts irregular bursts into a smooth, predictable flow.</p>
+        </div>
       </div>
+    </section>
+
+    <!-- Performance Graphs -->
+    <section class="card">
+      <h2>4. Performance Graphs & Results</h2>
+      <p>Performance charts generated from the NS-2 simulation trace analysis:</p>
+
+      <div class="graphs-grid">
+        <div class="graph-box">
+          <h3>Chart 1: Throughput vs Traffic Load</h3>
+          <img src="../outputs/graphs/chart1_throughput_vs_load.png" alt="Throughput vs Load">
+          <p class="caption">Comparison of system throughput between TCP and UDP as student traffic increases.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 2: End-to-End Delay vs User Load</h3>
+          <img src="../outputs/graphs/chart2_delay_vs_load.png" alt="Delay vs Load">
+          <p class="caption">Average end-to-end delay (ms) across increasing concurrent student loads.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 3: Packet Loss Rate (PLR %)</h3>
+          <img src="../outputs/graphs/chart3_packet_loss_vs_load.png" alt="Packet Loss Rate">
+          <p class="caption">Packet loss rate increases under high user load due to router buffer congestion.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 4: Packet Delivery Ratio (PDR %)</h3>
+          <img src="../outputs/graphs/chart4_pdr_comparison.png" alt="Packet Delivery Ratio">
+          <p class="caption">Percentage of transmitted packets successfully delivered to destinations.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 5: Leaky Bucket Traffic Shaping Impact</h3>
+          <img src="../outputs/graphs/chart5_leaky_bucket_impact.png" alt="Leaky Bucket Impact">
+          <p class="caption">Comparison of bursty unregulated traffic vs smooth Leaky Bucket output and packet drops.</p>
+        </div>
+
+        <div class="graph-box">
+          <h3>Chart 6: Go-Back-N Window Size vs Efficiency</h3>
+          <img src="../outputs/graphs/chart6_gbn_efficiency.png" alt="GBN Efficiency">
+          <p class="caption">Impact of window size (W) on transmission efficiency and retransmissions under loss.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Run NS-2 & AWK -->
+    <section class="card">
+      <h2>5. How to Run the NS-2 Simulations & AWK Scripts</h2>
+      <div class="code-block">
+        <p><strong># 1. Run NS-2 Simulations (TCL scripts):</strong></p>
+        <code>
+          cd ns2_simulations<br>
+          ns elearning_topology.tcl<br>
+          ns go_back_n.tcl<br>
+          ns leaky_bucket.tcl
+        </code>
+
+        <p style="margin-top: 15px;"><strong># 2. Analyze Trace Files with AWK Scripts:</strong></p>
+        <code>
+          cd ../awk_scripts<br>
+          awk -f throughput.awk ../ns2_simulations/elearning_output.tr<br>
+          awk -f delay.awk ../ns2_simulations/elearning_output.tr<br>
+          awk -f packet_loss.awk ../ns2_simulations/elearning_output.tr
+        </code>
+
+        <p style="margin-top: 15px;"><strong># 3. Generate Performance Charts (Python):</strong></p>
+        <code>
+          python python_engine/generate_charts.py
+        </code>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Computer Networks & Internet Protocols (CNIP) Lab Project &middot; NS-2 Network Simulation</p>
     </div>
-  </div>
-</header>
+  </footer>
 
-<!-- ============================================================
-     MAIN CONTENT
-     ============================================================ -->
-<main id="main-content">
-
-  <!-- ========================================================
-       TAB 1: OVERVIEW
-       ======================================================== -->
-  <section class="tab-panel active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
-    <div class="section-heading mb-6">
-      <h1 class="gradient-text" style="font-size:2rem;font-weight:800;">
-        Network Performance Dashboard
-      </h1>
-      <p>NS-2 simulation results for Low (10), Medium (30), and High (100) concurrent user loads.</p>
-    </div>
-
-
-
-    <!-- 🎨 Color Key -->
-    <div class="color-key-bar">
-      <span class="ck-label">Color Guide:</span>
-      <span><span class="ck-dot" style="background:var(--color-tcp)"></span><span class="cpill tcp">TCP</span> Reliable protocol (LMS, Exams)</span>
-      <span><span class="ck-dot" style="background:var(--color-udp)"></span><span class="cpill udp">UDP</span> Fast protocol (Video, Portal)</span>
-      <span><span class="ck-dot" style="background:var(--color-low)"></span><span class="cpill low">Low (10 users)</span></span>
-      <span><span class="ck-dot" style="background:var(--color-medium)"></span><span class="cpill med">Medium (30 users)</span></span>
-      <span><span class="ck-dot" style="background:var(--color-high)"></span><span class="cpill high">High (100 users)</span></span>
-    </div>
-
-    <!-- Metric Cards -->
-    <div class="metrics-grid mb-8" id="overview-metrics">
-      <div class="metric-card">
-        <div class="metric-icon purple" aria-hidden="true">📶</div>
-        <div class="metric-info">
-          <div class="metric-value" id="metric-tput">--</div>
-          <div class="metric-label">System Throughput (Kbps)</div>
-          <span class="metric-delta up" id="metric-tput-delta">TCP/UDP avg</span>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon cyan" aria-hidden="true">⏱</div>
-        <div class="metric-info">
-          <div class="metric-value" id="metric-delay">--</div>
-          <div class="metric-label">Avg End-to-End Delay (ms)</div>
-          <span class="metric-delta down" id="metric-delay-delta">High load</span>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon red" aria-hidden="true">📉</div>
-        <div class="metric-info">
-          <div class="metric-value" id="metric-plr">--</div>
-          <div class="metric-label">Packet Loss Rate (%)</div>
-          <span class="metric-delta down" id="metric-plr-delta">High load</span>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon green" aria-hidden="true">✅</div>
-        <div class="metric-info">
-          <div class="metric-value" id="metric-pdr">--</div>
-          <div class="metric-label">Packet Delivery Ratio (%)</div>
-          <span class="metric-delta up" id="metric-pdr-delta">TCP better</span>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon orange" aria-hidden="true">👨‍🎓</div>
-        <div class="metric-info">
-          <div class="metric-value">100</div>
-          <div class="metric-label">Max Concurrent Students</div>
-          <span class="metric-delta down">High congestion</span>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon blue" aria-hidden="true">🔁</div>
-        <div class="metric-info">
-          <div class="metric-value" id="metric-retx">--</div>
-          <div class="metric-label">GBN Retransmissions (W=64)</div>
-          <span class="metric-delta down">10% loss rate</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Overview Grid: Topology + Services -->
-    <div class="overview-grid">
-      <!-- Topology Visualization -->
-      <div class="card">
-        <div class="card-title">🏛️ University E-Learning Network Topology</div>
-        <div class="topology-canvas-wrapper">
-          <canvas id="topology-canvas" width="700" height="380"
-                  aria-label="University E-Learning Network Topology Diagram">
-          </canvas>
-        </div>
-        <div class="legend-row mt-3 mb-0">
-          <div class="legend-item"><span class="legend-dot" style="background:#4FC3F7"></span>TCP Flows (LMS, Exam)</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#FF8A65"></span>UDP Flows (Video, Portal)</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#66BB6A"></span>ACK Packets</div>
-        </div>
-      </div>
-
-      <!-- E-Learning Services -->
-      <div class="card">
-        <div class="card-title">🎓 E-Learning Services</div>
-        <div class="services-list">
-          <div class="service-item">
-            <div class="service-icon">📚</div>
-            <div class="service-info">
-              <div class="service-name">Learning Management System (LMS)</div>
-              <div class="service-desc">Course content, assignments, grades – Requires reliable delivery</div>
-            </div>
-            <span class="service-badge tcp">TCP</span>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">🎥</div>
-            <div class="service-info">
-              <div class="service-name">Video Lectures & Live Classes</div>
-              <div class="service-desc">Streaming media – latency sensitive, tolerates minor loss</div>
-            </div>
-            <span class="service-badge udp">UDP</span>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">📝</div>
-            <div class="service-info">
-              <div class="service-name">Online Examination Portal</div>
-              <div class="service-desc">Zero-loss critical – TCP with high reliability window</div>
-            </div>
-            <span class="service-badge tcp">TCP</span>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">👤</div>
-            <div class="service-info">
-              <div class="service-name">Student Portal & Announcements</div>
-              <div class="service-desc">Profile, notifications, schedules – lightweight traffic</div>
-            </div>
-            <span class="service-badge udp">UDP</span>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">📡</div>
-            <div class="service-info">
-              <div class="service-name">Network Infrastructure</div>
-              <div class="service-desc">Core Router → Campus Gateway → Access Switches</div>
-            </div>
-            <span class="service-badge online">NS-2</span>
-          </div>
-        </div>
-
-        <!-- Scenario Selector -->
-        <div class="mt-4">
-          <div class="card-title">Traffic Scenario</div>
-          <div class="flex gap-2 flex-wrap">
-            <button class="btn btn-secondary btn-sm scenario-btn active-scenario" data-scenario="low" id="btn-scenario-low">
-              🟢 Low (10 users)
-            </button>
-            <button class="btn btn-secondary btn-sm scenario-btn" data-scenario="medium" id="btn-scenario-medium">
-              🟡 Medium (30 users)
-            </button>
-            <button class="btn btn-secondary btn-sm scenario-btn" data-scenario="high" id="btn-scenario-high">
-              🔴 High (100 users)
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick charts row -->
-    <div class="charts-grid mt-6">
-      <div class="chart-card">
-        <div class="chart-title">
-          📶 Throughput vs Traffic Load
-          <span class="chart-badge both">TCP + UDP</span>
-        </div>
-        <canvas id="chart-throughput-overview" height="220"
-                aria-label="Throughput vs Traffic Load chart"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">
-          📉 Packet Loss Rate vs User Count
-          <span class="chart-badge both">TCP + UDP</span>
-        </div>
-        <canvas id="chart-loss-overview" height="220"
-                aria-label="Packet Loss Rate chart"></canvas>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================
-       TAB 2: LIVE SIMULATION
-       ======================================================== -->
-  <section class="tab-panel" id="panel-simulation" role="tabpanel" aria-labelledby="tab-simulation">
-    <div class="section-heading mb-6">
-      <h2>Live Traffic Simulation</h2>
-      <p>Real-time packet flow between nodes and the server. 🔴 = dropped packet.</p>
-    </div>
-
-    <!-- Simulation Controls -->
-    <div class="sim-controls-row mb-4">
-      <div class="sim-control-card">
-        <div class="sim-control-title">👥 Student Count</div>
-        <div class="control-row">
-          <span class="control-label">Users:</span>
-          <input type="range" id="sim-users" min="5" max="100" value="20" step="5"
-                 aria-label="Number of concurrent students">
-          <span class="control-value" id="sim-users-val">20</span>
-        </div>
-      </div>
-      <div class="sim-control-card">
-        <div class="sim-control-title">📦 Data Rate</div>
-        <div class="control-row">
-          <span class="control-label">Rate:</span>
-          <input type="range" id="sim-rate" min="1" max="10" value="3" step="0.5"
-                 aria-label="Data rate in Mbps">
-          <span class="control-value" id="sim-rate-val">3 Mbps</span>
-        </div>
-      </div>
-      <div class="sim-control-card">
-        <div class="sim-control-title">❌ Packet Loss</div>
-        <div class="control-row">
-          <span class="control-label">Loss%:</span>
-          <input type="range" id="sim-loss" min="0" max="30" value="5" step="1"
-                 aria-label="Packet loss percentage">
-          <span class="control-value" id="sim-loss-val">5%</span>
-        </div>
-      </div>
-      <div class="sim-control-card">
-        <div class="sim-control-title">🔧 Protocol</div>
-        <div class="control-row">
-          <select id="sim-protocol" aria-label="Select protocol">
-            <option value="both">TCP + UDP</option>
-            <option value="tcp">TCP only</option>
-            <option value="udp">UDP only</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex gap-3 mb-4">
-      <button class="btn btn-primary" id="sim-start-btn">▶ Start Simulation</button>
-      <button class="btn btn-secondary" id="sim-pause-btn" disabled>⏸ Pause</button>
-      <button class="btn btn-danger" id="sim-reset-btn">↺ Reset</button>
-    </div>
-
-    <!-- Live Simulation Canvas -->
-    <div class="card mb-4">
-      <div class="flex justify-between items-center mb-3">
-        <div class="card-title mb-0">🔴 Live Network Packet Flow</div>
-        <div class="flex gap-3">
-          <div class="legend-item"><span class="legend-dot" style="background:#4FC3F7"></span>TCP</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#FF8A65"></span>UDP</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#EF5350"></span>Dropped</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#66BB6A"></span>ACK</div>
-        </div>
-      </div>
-      <canvas id="sim-canvas" width="1200" height="480" style="width:100%;background:#08080F;border-radius:10px;"
-              aria-label="Live network simulation visualization"></canvas>
-    </div>
-
-    <!-- Live Metrics -->
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-icon cyan">📤</div>
-        <div class="metric-info">
-          <div class="metric-value font-mono" id="live-sent">0</div>
-          <div class="metric-label">Packets Sent</div>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon green">📥</div>
-        <div class="metric-info">
-          <div class="metric-value font-mono" id="live-recv">0</div>
-          <div class="metric-label">Packets Received</div>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon red">⛔</div>
-        <div class="metric-info">
-          <div class="metric-value font-mono" id="live-drop">0</div>
-          <div class="metric-label">Packets Dropped</div>
-        </div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-icon purple">⚡</div>
-        <div class="metric-info">
-          <div class="metric-value font-mono" id="live-tput">0</div>
-          <div class="metric-label">Throughput (Kbps)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================
-       TAB 3: TCP vs UDP PROTOCOL COMPARISON
-       ======================================================== -->
-  <section class="tab-panel" id="panel-protocol" role="tabpanel" aria-labelledby="tab-protocol">
-    <div class="section-heading mb-6">
-      <h2>TCP vs UDP Protocol Comparison</h2>
-      <p>Side-by-side performance metrics across all traffic scenarios.</p>
-    </div>
-
-    <!-- Protocol Summary Cards -->
-    <div class="protocol-header mb-6">
-      <div class="protocol-card tcp">
-        <div class="protocol-name">TCP</div>
-        <p class="text-sm mb-3" style="color:var(--text-secondary)">
-          Reliable, ordered delivery — used for LMS &amp; Exam Portal.
-        </p>
-        <div class="flex gap-3 flex-wrap">
-          <div><div class="text-xs text-muted">Throughput</div><div class="font-mono" style="color:var(--color-tcp)" id="tcp-tput">--</div></div>
-          <div><div class="text-xs text-muted">Avg Delay</div><div class="font-mono" style="color:var(--color-tcp)" id="tcp-delay">--</div></div>
-          <div><div class="text-xs text-muted">PDR</div><div class="font-mono" style="color:var(--color-tcp)" id="tcp-pdr">--</div></div>
-          <div><div class="text-xs text-muted">PLR</div><div class="font-mono" style="color:var(--color-tcp)" id="tcp-plr">--</div></div>
-        </div>
-        <div class="mt-3 text-xs" style="color:var(--text-muted)">
-          ✅ Reliable &nbsp; ✅ Ordered &nbsp; ✅ Error-checked &nbsp; ⚠️ Higher latency &nbsp; ⚠️ Congestion control overhead
-        </div>
-      </div>
-
-      <div class="protocol-card udp">
-        <div class="protocol-name">UDP</div>
-        <p class="text-sm mb-3" style="color:var(--text-secondary)">
-          Fast, connectionless — used for Video Streaming &amp; Student Portal.
-        </p>
-        <div class="flex gap-3 flex-wrap">
-          <div><div class="text-xs text-muted">Throughput</div><div class="font-mono" style="color:var(--color-udp)" id="udp-tput">--</div></div>
-          <div><div class="text-xs text-muted">Avg Delay</div><div class="font-mono" style="color:var(--color-udp)" id="udp-delay">--</div></div>
-          <div><div class="text-xs text-muted">PDR</div><div class="font-mono" style="color:var(--color-udp)" id="udp-pdr">--</div></div>
-          <div><div class="text-xs text-muted">PLR</div><div class="font-mono" style="color:var(--color-udp)" id="udp-plr">--</div></div>
-        </div>
-        <div class="mt-3 text-xs" style="color:var(--text-muted)">
-          ✅ Lower latency &nbsp; ✅ Higher throughput &nbsp; ⚠️ No reliability &nbsp; ⚠️ Packet loss not recovered
-        </div>
-      </div>
-    </div>
-
-    <!-- Scenario selector for protocol tab -->
-    <div class="flex gap-2 mb-4 flex-wrap">
-      <span class="text-xs text-muted items-center flex">Scenario:</span>
-      <button class="btn btn-secondary btn-sm proto-scenario-btn active-scenario" data-s="low">🟢 Low</button>
-      <button class="btn btn-secondary btn-sm proto-scenario-btn" data-s="medium">🟡 Medium</button>
-      <button class="btn btn-secondary btn-sm proto-scenario-btn" data-s="high">🔴 High</button>
-    </div>
-
-    <!-- Protocol Comparison Charts -->
-    <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">📶 Throughput Comparison <span class="chart-badge both">All Scenarios</span></div>
-        <canvas id="proto-chart-tput" height="240" aria-label="TCP vs UDP Throughput chart"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">⏱ Delay Comparison <span class="chart-badge both">All Scenarios</span></div>
-        <canvas id="proto-chart-delay" height="240" aria-label="TCP vs UDP Delay chart"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">❌ Packet Loss Rate <span class="chart-badge both">All Scenarios</span></div>
-        <canvas id="proto-chart-loss" height="240" aria-label="TCP vs UDP Packet Loss chart"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">✅ Packet Delivery Ratio <span class="chart-badge both">All Scenarios</span></div>
-        <canvas id="proto-chart-pdr" height="240" aria-label="TCP vs UDP PDR chart"></canvas>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================
-       TAB 4: ALGORITHM VISUALIZER
-       ======================================================== -->
-  <section class="tab-panel" id="panel-algorithms" role="tabpanel" aria-labelledby="tab-algorithms">
-    <div class="section-heading mb-6">
-      <h2>Algorithm Visualizer</h2>
-      <p>Interactive Go-Back-N ARQ and Leaky Bucket animations.</p>
-    </div>
-
-    <div class="algo-container">
-
-      <!-- Go-Back-N / Sliding Window -->
-      <div class="algo-card">
-        <div class="algo-header">
-          <div>
-            <div class="algo-title">🔁 Go-Back-N ARQ / Sliding Window</div>
-            <div class="algo-subtitle">LMS & Exam Portal reliable transmission</div>
-          </div>
-          <div class="algo-controls">
-            <button class="btn btn-primary btn-sm" id="gbn-start-btn">▶ Start</button>
-            <button class="btn btn-secondary btn-sm" id="gbn-reset-btn">↺</button>
-          </div>
-        </div>
-
-        <!-- GBN Controls -->
-        <div style="padding:0.75rem 1.25rem;border-bottom:1px solid var(--border-subtle);display:flex;flex-wrap:wrap;gap:0.75rem;">
-          <div class="control-row">
-            <span class="control-label">Window W:</span>
-            <input type="range" id="gbn-window" min="1" max="8" value="4" style="width:80px"
-                   aria-label="Go-Back-N window size">
-            <span class="control-value" id="gbn-window-val">4</span>
-          </div>
-          <div class="control-row">
-            <span class="control-label">Loss %:</span>
-            <input type="range" id="gbn-loss" min="0" max="40" value="15" style="width:80px"
-                   aria-label="Packet loss probability">
-            <span class="control-value" id="gbn-loss-val">15%</span>
-          </div>
-          <div class="control-row">
-            <span class="control-label">Speed:</span>
-            <input type="range" id="gbn-speed" min="1" max="5" value="2" style="width:60px"
-                   aria-label="Animation speed">
-            <span class="control-value" id="gbn-speed-val">2x</span>
-          </div>
-        </div>
-
-        <canvas id="gbn-canvas" class="algo-canvas" width="520" height="320"
-                style="width:100%" aria-label="Go-Back-N ARQ sliding window animation"></canvas>
-
-        <div class="algo-stats">
-          <div class="algo-stat">
-            <span class="algo-stat-label">Sent</span>
-            <span class="algo-stat-value text-cyan" id="gbn-stat-sent">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Acked</span>
-            <span class="algo-stat-value text-green" id="gbn-stat-acked">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Retransmit</span>
-            <span class="algo-stat-value text-red" id="gbn-stat-retx">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Efficiency</span>
-            <span class="algo-stat-value text-amber" id="gbn-stat-eff">--</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Window Base</span>
-            <span class="algo-stat-value" id="gbn-stat-base">0</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Leaky Bucket -->
-      <div class="algo-card">
-        <div class="algo-header">
-          <div>
-            <div class="algo-title">🪣 Leaky Bucket Traffic Shaper</div>
-            <div class="algo-subtitle">Video lecture stream congestion control</div>
-          </div>
-          <div class="algo-controls">
-            <button class="btn btn-primary btn-sm" id="lb-start-btn">▶ Start</button>
-            <button class="btn btn-secondary btn-sm" id="lb-reset-btn">↺</button>
-          </div>
-        </div>
-
-        <!-- LB Controls -->
-        <div style="padding:0.75rem 1.25rem;border-bottom:1px solid var(--border-subtle);display:flex;flex-wrap:wrap;gap:0.75rem;">
-          <div class="control-row">
-            <span class="control-label">Capacity:</span>
-            <input type="range" id="lb-capacity" min="10" max="100" value="40" style="width:80px"
-                   aria-label="Bucket capacity in packets">
-            <span class="control-value" id="lb-capacity-val">40 pkts</span>
-          </div>
-          <div class="control-row">
-            <span class="control-label">Leak Rate:</span>
-            <input type="range" id="lb-leak" min="1" max="20" value="8" style="width:80px"
-                   aria-label="Bucket leak rate in packets per second">
-            <span class="control-value" id="lb-leak-val">8 p/s</span>
-          </div>
-          <div class="control-row">
-            <span class="control-label">Burst:</span>
-            <button class="btn btn-danger btn-sm" id="lb-burst-btn">💥 Burst!</button>
-          </div>
-        </div>
-
-        <canvas id="lb-canvas" class="algo-canvas" width="520" height="320"
-                style="width:100%" aria-label="Leaky Bucket traffic shaping animation"></canvas>
-
-        <div class="algo-stats">
-          <div class="algo-stat">
-            <span class="algo-stat-label">Arrived</span>
-            <span class="algo-stat-value text-cyan" id="lb-stat-arrived">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Output</span>
-            <span class="algo-stat-value text-green" id="lb-stat-output">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Dropped</span>
-            <span class="algo-stat-value text-red" id="lb-stat-dropped">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">In Bucket</span>
-            <span class="algo-stat-value text-amber" id="lb-stat-bucket">0</span>
-          </div>
-          <div class="algo-stat">
-            <span class="algo-stat-label">Drop Rate</span>
-            <span class="algo-stat-value" id="lb-stat-droprate">0%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GBN Window Efficiency Chart -->
-    <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">🔁 GBN Efficiency vs Window Size <span class="chart-badge both">Multiple Loss Rates</span></div>
-        <canvas id="gbn-efficiency-chart" height="260" aria-label="GBN efficiency vs window size chart"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">🪣 Leaky Bucket: Bucket Level Timeline <span class="chart-badge both">Live Data</span></div>
-        <canvas id="lb-timeline-chart" height="260" aria-label="Leaky bucket level timeline chart"></canvas>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================
-       TAB 5: ANALYTICS
-       ======================================================== -->
-  <section class="tab-panel" id="panel-analytics" role="tabpanel" aria-labelledby="tab-analytics">
-    <div class="section-heading mb-6">
-      <h2>Performance Analytics & Results</h2>
-      <p>NS-2 simulation metrics across Low, Medium, and High traffic scenarios.</p>
-    </div>
-
-    <!-- Full Analytics Charts -->
-    <div class="graphs-gallery">
-
-      <div class="graph-card">
-        <div class="graph-header">
-          <div class="graph-number">1</div>
-          <div>
-            <div class="graph-title">Throughput vs User Load (TCP vs UDP)</div>
-            <div class="graph-desc">System throughput across Low, Medium, High traffic scenarios</div>
-          </div>
-        </div>
-        <div class="graph-img-wrapper">
-          <canvas id="analytics-chart1" height="280" style="width:100%" aria-label="Throughput vs User Load analytics chart"></canvas>
-        </div>
-      </div>
-
-      <div class="graph-card">
-        <div class="graph-header">
-          <div class="graph-number">2</div>
-          <div>
-            <div class="graph-title">End-to-End Delay vs Traffic Load</div>
-            <div class="graph-desc">Average E2E delay as concurrent student count increases</div>
-          </div>
-        </div>
-        <div class="graph-img-wrapper">
-          <canvas id="analytics-chart2" height="280" style="width:100%" aria-label="Delay vs Traffic Load analytics chart"></canvas>
-        </div>
-      </div>
-
-      <div class="graph-card">
-        <div class="graph-header">
-          <div class="graph-number">3</div>
-          <div>
-            <div class="graph-title">Packet Loss Rate vs User Count</div>
-            <div class="graph-desc">PLR% showing TCP vs UDP behavior under overload</div>
-          </div>
-        </div>
-        <div class="graph-img-wrapper">
-          <canvas id="analytics-chart3" height="280" style="width:100%" aria-label="Packet loss rate analytics chart"></canvas>
-        </div>
-      </div>
-
-      <div class="graph-card">
-        <div class="graph-header">
-          <div class="graph-number">4</div>
-          <div>
-            <div class="graph-title">Packet Delivery Ratio (PDR) Comparison</div>
-            <div class="graph-desc">PDR% per scenario and per e-learning service type</div>
-          </div>
-        </div>
-        <div class="graph-img-wrapper">
-          <canvas id="analytics-chart4" height="280" style="width:100%" aria-label="PDR comparison analytics chart"></canvas>
-        </div>
-      </div>
-
-      <div class="graph-card">
-        <div class="graph-header">
-          <div class="graph-number">5</div>
-          <div>
-            <div class="graph-title">Leaky Bucket Traffic Shaping Impact</div>
-            <div class="graph-desc">Before vs After leaky bucket: drop rate and output rate comparison</div>
-          </div>
-        </div>
-        <div class="graph-img-wrapper">
-          <canvas id="analytics-chart5" height="280" style="width:100%" aria-label="Leaky bucket impact analytics chart"></canvas>
-        </div>
-      </div>
-
-      <div class="graph-card">
-        <div class="graph-header">
-          <div class="graph-number">6</div>
-          <div>
-            <div class="graph-title">Go-Back-N Window Size vs Efficiency</div>
-            <div class="graph-desc">GBN efficiency and retransmissions across window sizes</div>
-          </div>
-        </div>
-        <div class="graph-img-wrapper">
-          <canvas id="analytics-chart6" height="280" style="width:100%" aria-label="GBN window efficiency analytics chart"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Simulation Log -->
-    <div class="card mt-6">
-      <div class="card-title">📋 Simulation Event Log</div>
-      <div class="log-panel" id="sim-log" aria-label="Simulation event log" aria-live="polite">
-        <div class="log-info">[SYSTEM] E-Learning Network Performance Analyzer initialized</div>
-        <div class="log-info">[SYSTEM] NS-2 Trace Analyzer: ready</div>
-        <div class="log-info">[SYSTEM] Algorithm Simulators: Go-Back-N, Leaky Bucket loaded</div>
-        <div class="log-success">[INFO]   Generating synthetic NS-2 trace data...</div>
-        <div class="log-success">[TRACE]  elearning_low_tcp.tr     → parsed (Low, 10 users, TCP)</div>
-        <div class="log-success">[TRACE]  elearning_low_udp.tr     → parsed (Low, 10 users, UDP)</div>
-        <div class="log-success">[TRACE]  elearning_medium_tcp.tr  → parsed (Medium, 30 users, TCP)</div>
-        <div class="log-success">[TRACE]  elearning_medium_udp.tr  → parsed (Medium, 30 users, UDP)</div>
-        <div class="log-success">[TRACE]  elearning_high_tcp.tr    → parsed (High, 100 users, TCP)</div>
-        <div class="log-success">[TRACE]  elearning_high_udp.tr    → parsed (High, 100 users, UDP)</div>
-        <div class="log-info">[METRICS] Computing throughput, delay, PLR, PDR...</div>
-        <div class="log-success">[OK]     All metrics computed. Generating charts...</div>
-      </div>
-    </div>
-
-  </section>
-
-</main>
-
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-inner">
-    <p>
-      <strong>Nexus</strong> · NS-2 · TCP/UDP · Go-Back-N · Leaky Bucket
-    </p>
-  </div>
-</footer>
-
-<script src="app.js" defer></script>
 </body>
 </html>

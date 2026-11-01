@@ -3,48 +3,48 @@
     "label": "Low (10 users)",
     "users": 10,
     "TCP": {
-      "total_sent": 4207,
-      "total_received": 4189,
-      "total_dropped": 18,
-      "plr_percent": 0.428,
-      "pdr_percent": 99.572,
-      "throughput_kbps": 4639.271,
-      "avg_delay_ms": 63.8333,
-      "avg_jitter_ms": 12.6568
+      "total_sent": 4204,
+      "total_received": 4181,
+      "total_dropped": 23,
+      "plr_percent": 0.547,
+      "pdr_percent": 99.453,
+      "throughput_kbps": 4610.658,
+      "avg_delay_ms": 63.9613,
+      "avg_jitter_ms": 12.7268
     },
     "UDP": {
-      "total_sent": 6145,
-      "total_received": 6111,
-      "total_dropped": 34,
-      "plr_percent": 0.553,
-      "pdr_percent": 99.447,
-      "throughput_kbps": 4619.917,
-      "avg_delay_ms": 63.7242,
-      "avg_jitter_ms": 12.6095
+      "total_sent": 6146,
+      "total_received": 6103,
+      "total_dropped": 43,
+      "plr_percent": 0.7,
+      "pdr_percent": 99.3,
+      "throughput_kbps": 4614.451,
+      "avg_delay_ms": 63.8342,
+      "avg_jitter_ms": 12.765
     }
   },
   "medium": {
     "label": "Medium (30 users)",
     "users": 30,
     "TCP": {
-      "total_sent": 47493,
-      "total_received": 45414,
-      "total_dropped": 2079,
-      "plr_percent": 4.377,
-      "pdr_percent": 95.623,
-      "throughput_kbps": 49987.046,
-      "avg_delay_ms": 63.5362,
-      "avg_jitter_ms": 11.8471
+      "total_sent": 47515,
+      "total_received": 45368,
+      "total_dropped": 2147,
+      "plr_percent": 4.519,
+      "pdr_percent": 95.481,
+      "throughput_kbps": 49977.797,
+      "avg_delay_ms": 63.5973,
+      "avg_jitter_ms": 11.9904
     },
     "UDP": {
-      "total_sent": 69349,
-      "total_received": 66360,
-      "total_dropped": 2989,
-      "plr_percent": 4.31,
-      "pdr_percent": 95.69,
-      "throughput_kbps": 50059.276,
-      "avg_delay_ms": 63.5826,
-      "avg_jitter_ms": 12.0001
+      "total_sent": 69381,
+      "total_received": 66331,
+      "total_dropped": 3050,
+      "plr_percent": 4.396,
+      "pdr_percent": 95.604,
+      "throughput_kbps": 50098.272,
+      "avg_delay_ms": 63.6356,
+      "avg_jitter_ms": 11.9754
     }
   },
   "high": {
@@ -52,23 +52,23 @@
     "users": 100,
     "TCP": {
       "total_sent": 497642,
-      "total_received": 412550,
-      "total_dropped": 85092,
-      "plr_percent": 17.099,
-      "pdr_percent": 82.901,
-      "throughput_kbps": 453227.782,
-      "avg_delay_ms": 62.4097,
-      "avg_jitter_ms": 11.8532
+      "total_received": 412859,
+      "total_dropped": 84783,
+      "plr_percent": 17.037,
+      "pdr_percent": 82.963,
+      "throughput_kbps": 453538.682,
+      "avg_delay_ms": 62.4415,
+      "avg_jitter_ms": 11.8537
     },
     "UDP": {
-      "total_sent": 726679,
-      "total_received": 602245,
-      "total_dropped": 124434,
-      "plr_percent": 17.124,
-      "pdr_percent": 82.876,
-      "throughput_kbps": 453822.763,
-      "avg_delay_ms": 62.3877,
-      "avg_jitter_ms": 11.8428
+      "total_sent": 726683,
+      "total_received": 602284,
+      "total_dropped": 124399,
+      "plr_percent": 17.119,
+      "pdr_percent": 82.881,
+      "throughput_kbps": 454119.76,
+      "avg_delay_ms": 62.4109,
+      "avg_jitter_ms": 11.8315
     }
   }
 }

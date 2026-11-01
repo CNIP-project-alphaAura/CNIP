@@ -204,7 +204,7 @@ class NS2TraceParser:
             }
         with open(output_path, 'w') as f:
             json.dump(data, f, indent=2)
-        print(f"  [✓] Metrics exported to: {output_path}")
+        print(f"  [OK] Metrics exported to: {output_path}")
 
 
 # ---------------------------------------------------------------------------
@@ -336,7 +336,7 @@ class SyntheticTraceGenerator:
             f.write(f"# Generated: cross-platform Python engine\n")
             f.write("\n".join(lines) + "\n")
 
-        print(f"  [✓] Synthetic trace: {output_path} ({len(lines)} events)")
+        print(f"  [OK] Synthetic trace: {output_path} ({len(lines)} events)")
         return output_path
 
 
@@ -430,11 +430,11 @@ if __name__ == "__main__":
             json_path = os.path.join(metrics_dir, f"metrics_{key}.json")
             with open(json_path, 'w') as f:
                 json.dump(agg, f, indent=2)
-            print(f"  [✓] Metrics saved: {json_path}")
+            print(f"  [OK] Metrics saved: {json_path}")
 
         # Combined metrics export for chart generation
         combined_path = os.path.join(metrics_dir, "all_metrics.json")
         with open(combined_path, 'w') as f:
             json.dump(all_metrics, f, indent=2)
-        print(f"\n  [✓] Combined metrics: {combined_path}")
-        print("  [✓] Run 'python generate_charts.py' to create performance graphs.")
+        print(f"\n  [OK] Combined metrics: {combined_path}")
+        print("  [OK] Run 'python generate_charts.py' to create performance graphs.")

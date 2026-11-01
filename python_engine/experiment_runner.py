@@ -127,7 +127,7 @@ def run_protocol_comparison() -> Dict:
     path = os.path.join(METRICS_DIR, "protocol_comparison.json")
     with open(path, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"\n  [✓] Protocol comparison saved: {path}")
+    print(f"\n  [OK] Protocol comparison saved: {path}")
     return results
 
 
@@ -221,7 +221,7 @@ def run_congestion_analysis() -> Dict:
     path = os.path.join(METRICS_DIR, "congestion_analysis.json")
     with open(path, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"\n  [✓] Congestion analysis saved: {path}")
+    print(f"\n  [OK] Congestion analysis saved: {path}")
     return results
 
 
@@ -265,7 +265,7 @@ def run_gbn_experiment() -> Dict:
     path = os.path.join(ALGO_DIR, "gbn_experiment.json")
     with open(path, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"\n  [✓] GBN experiment saved: {path}")
+    print(f"\n  [OK] GBN experiment saved: {path}")
     return results
 
 
@@ -332,7 +332,7 @@ def run_leaky_bucket_experiment() -> Dict:
     path = os.path.join(ALGO_DIR, "leaky_bucket_experiment.json")
     with open(path, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"\n  [✓] Leaky Bucket experiment saved: {path}")
+    print(f"\n  [OK] Leaky Bucket experiment saved: {path}")
     return results
 
 
@@ -367,9 +367,9 @@ def run_all_experiments():
 
     elapsed = time.time() - start
     print("\n" + "="*65)
-    print(f"  [✓] All experiments complete in {elapsed:.1f}s")
-    print(f"  [✓] Master dataset: {master_path}")
-    print(f"  [✓] Run 'python generate_charts.py' to generate all graphs.")
+    print(f"  [OK] All experiments complete in {elapsed:.1f}s")
+    print(f"  [OK] Master dataset: {master_path}")
+    print(f"  [OK] Run 'python generate_charts.py' to generate all graphs.")
     print("="*65)
 
     return master

@@ -1,221 +1,157 @@
-# =============================================================================
-# NS-2 Simulation: Network Performance Analysis of University E-Learning System
+# ====================================================================
+# NS-2 Simulation: University E-Learning System Network Performance
 # File: elearning_topology.tcl
-# Description: Simulates university network with e-learning services under
-#              varying traffic loads (Low: 10, Medium: 30, High: 100 users)
-#              Compares TCP and UDP under LMS, Video, Exam, Student Portal traffic
-# Concepts: TCP/UDP, Congestion, Packet Loss, Throughput, Delay, PDR
-# =============================================================================
+#
+# Scenario:
+#   Simulates an e-learning environment with:
+#     - E-Learning Server (Node 0)
+#     - Campus Core Router (Node 1)
+#     - Student Nodes (Nodes 2..N)
+#
+# Services Modeled:
+#   1. Learning Management System (LMS): TCP
+#   2. Examination Portal: TCP (Reliable delivery)
+#   3. Video Lectures: UDP/CBR (Real-time, delay-sensitive)
+#   4. Student Portal: UDP/CBR (General access)
+#
+# Traffic Loads:
+#   - Low: 10 students
+#   - Medium: 30 students
+#   - High: 100 students
+# ====================================================================
 
-# -------------------- Simulator Initialization --------------------------------
 set ns [new Simulator]
 
-# Enable Differentiated Services (color-coded packet tracing)
-$ns color 1 Blue      ;# TCP - LMS / Exam Portal
-$ns color 2 Red       ;# UDP - Video Lectures
-$ns color 3 Green     ;# TCP - Student Portal
-$ns color 4 Yellow    ;# UDP - Live Classes
+# Set color codes for NAM visualization
+$ns color 1 Blue    ;# TCP: LMS & Exam Portal
+$ns color 2 Red     ;# UDP: Video Lectures
+$ns color 3 Green   ;# UDP: Student Portal
 
-# -------------------- Output Files -------------------------------------------
+# Open trace and animation files
 set tracefile [open "elearning_output.tr" w]
 set namfile   [open "elearning_output.nam" w]
-$ns trace-all    $tracefile
+$ns trace-all $tracefile
 $ns namtrace-all $namfile
 
-# -------------------- Topology Parameters ------------------------------------
-# Network Bandwidth and Delay Parameters
-# Core Link: Server <-> Gateway Router
-set core_bw  "100Mb"
-set core_dly "2ms"
+# --------------------------------------------------------------------
+# 1. Traffic Load Configuration
+# Change 'num_students' to 10 (Low), 30 (Medium), or 100 (High)
+# --------------------------------------------------------------------
+set num_students 10
+if {$argc > 0} {
+    set num_students [lindex $argv 0]
+}
+puts "Simulating E-Learning Network with $num_students students..."
 
-# Distribution Link: Gateway <-> Access Switch
-set dist_bw  "10Mb"
-set dist_dly "5ms"
+# --------------------------------------------------------------------
+# 2. Node Creation
+# --------------------------------------------------------------------
+set server [new Node]
+set router [new Node]
+$server label "E-Learning Server"
+$router label "Campus Router"
 
-# Access Link: Switch <-> Student Nodes
-set acc_bw   "1Mb"
-set acc_dly  "10ms"
+# Bottleneck link between Server and Campus Router
+# 10 Mbps bandwidth, 5ms propagation delay, DropTail queue of size 50
+$ns duplex-link $server $router 10Mb 5ms DropTail
+$ns queue-limit $server $router 50
 
-# -------------------- Node Creation ------------------------------------------
-# Infrastructure Nodes
-set elearning_server [new Node]   ;# Node 0: University E-Learning Server
-set gateway          [new Node]   ;# Node 1: Campus Gateway Router
-set core_switch      [new Node]   ;# Node 2: Core Network Switch
-set access_switch1   [new Node]   ;# Node 3: Access Switch - Lab Block A
-set access_switch2   [new Node]   ;# Node 4: Access Switch - Lab Block B
-
-$elearning_server label "E-Learning Server"
-$gateway          label "Gateway Router"
-$core_switch      label "Core Switch"
-$access_switch1   label "Access SW-A"
-$access_switch2   label "Access SW-B"
-
-# Student Nodes -- Low Traffic Scenario: 10 students
-# For medium/high traffic, additional student nodes added dynamically
-set num_students 10          ;# Change to 30 (medium) or 100 (high)
-
+# Create student nodes and connect them to the router
 set students {}
 for {set i 0} {$i < $num_students} {incr i} {
     set s [new Node]
+    $s label "Student-$i"
     lappend students $s
+    # Each student link: 2 Mbps bandwidth, 10ms delay
+    $ns duplex-link $s $router 2Mb 10ms DropTail
 }
 
-# -------------------- Link Creation ------------------------------------------
-# Core Infrastructure Links
-$ns duplex-link $elearning_server $gateway         $core_bw $core_dly DropTail
-$ns duplex-link $gateway          $core_switch     $core_bw $core_dly DropTail
-$ns duplex-link $core_switch      $access_switch1  $dist_bw $dist_dly DropTail
-$ns duplex-link $core_switch      $access_switch2  $dist_bw $dist_dly DropTail
-
-# Student Access Links
-set half [expr $num_students / 2]
+# --------------------------------------------------------------------
+# 3. Traffic Flows (LMS, Video, Exam, Portal)
+# --------------------------------------------------------------------
 for {set i 0} {$i < $num_students} {incr i} {
-    if {$i < $half} {
-        $ns duplex-link [lindex $students $i] $access_switch1 $acc_bw $acc_dly DropTail
-    } else {
-        $ns duplex-link [lindex $students $i] $access_switch2 $acc_bw $acc_dly DropTail
-    }
-}
-
-# -------------------- Queue Settings (for Leaky Bucket effect) ---------------
-$ns queue-limit $gateway $core_switch 50
-
-# -------------------- Traffic Setup: E-Learning Applications -----------------
-# Application Port Assignments:
-#   Port 80/443  -> LMS (TCP)
-#   Port 1935    -> Video Streaming (UDP/CBR)
-#   Port 8080    -> Exam Portal (TCP)
-#   Port 3000    -> Student Portal (TCP)
-
-set traffic_flows {}
-
-for {set i 0} {$i < $num_students} {incr i} {
-    set student [lindex $students $i]
+    set s [lindex $students $i]
     set flow_type [expr $i % 4]
 
     if {$flow_type == 0} {
-        # --- LMS Traffic: TCP FTP (file uploads/downloads) ---
-        set tcp_agent [new Agent/TCP]
-        set tcp_sink  [new Agent/TCPSink]
-        $ns attach-agent $student          $tcp_agent
-        $ns attach-agent $elearning_server $tcp_sink
-        $ns connect $tcp_agent $tcp_sink
-        $tcp_agent set fid_ 1
-        $tcp_agent set window_ 32
+        # Flow 0: LMS (TCP)
+        set tcp [new Agent/TCP]
+        set sink [new Agent/TCPSink]
+        $tcp set fid_ 1
+        $tcp set window_ 32
+        $ns attach-agent $s $tcp
+        $ns attach-agent $server $sink
+        $ns connect $tcp $sink
 
-        set ftp_app [new Application/FTP]
-        $ftp_app attach-agent $tcp_agent
-        $ns at [expr 0.1 + $i * 0.05] "$ftp_app start"
-        $ns at 9.5                    "$ftp_app stop"
-        lappend traffic_flows [list "LMS-TCP" $i]
+        set ftp [new Application/FTP]
+        $ftp attach-agent $tcp
+        $ns at 0.5 "$ftp start"
+        $ns at 9.5 "$ftp stop"
 
     } elseif {$flow_type == 1} {
-        # --- Video Lecture Streaming: UDP/CBR (Real-time video) ---
-        set udp_agent  [new Agent/UDP]
-        set udp_null   [new Agent/Null]
-        $ns attach-agent $student          $udp_agent
-        $ns attach-agent $elearning_server $udp_null
-        $ns connect $udp_agent $udp_null
-        $udp_agent set fid_ 2
+        # Flow 1: Video Lectures (UDP / CBR)
+        set udp [new Agent/UDP]
+        set null [new Agent/Null]
+        $udp set fid_ 2
+        $ns attach-agent $s $udp
+        $ns attach-agent $server $null
+        $ns connect $udp $null
 
-        set cbr_app [new Application/Traffic/CBR]
-        $cbr_app set packetSize_ 1000
-        $cbr_app set rate_       "512Kb"
-        $cbr_app attach-agent $udp_agent
-        $ns at [expr 0.2 + $i * 0.05] "$cbr_app start"
-        $ns at 9.5                     "$cbr_app stop"
-        lappend traffic_flows [list "VideoUDP" $i]
+        set cbr [new Application/Traffic/CBR]
+        $cbr set packetSize_ 1000
+        $cbr set rate_ 512Kb
+        $cbr attach-agent $udp
+        $ns at 0.5 "$cbr start"
+        $ns at 9.5 "$cbr stop"
 
     } elseif {$flow_type == 2} {
-        # --- Exam Portal: TCP (Reliable, ordered delivery critical) ---
-        set tcp_agent [new Agent/TCP/Reno]
-        set tcp_sink  [new Agent/TCPSink]
-        $ns attach-agent $student          $tcp_agent
-        $ns attach-agent $elearning_server $tcp_sink
-        $ns connect $tcp_agent $tcp_sink
-        $tcp_agent set fid_ 1
-        $tcp_agent set window_ 64
+        # Flow 2: Examination Portal (TCP Reno)
+        set tcp [new Agent/TCP/Reno]
+        set sink [new Agent/TCPSink]
+        $tcp set fid_ 1
+        $tcp set window_ 64
+        $ns attach-agent $s $tcp
+        $ns attach-agent $server $sink
+        $ns connect $tcp $sink
 
-        set ftp_app [new Application/FTP]
-        $ftp_app attach-agent $tcp_agent
-        $ns at [expr 0.15 + $i * 0.05] "$ftp_app start"
-        $ns at 9.5                      "$ftp_app stop"
-        lappend traffic_flows [list "ExamPortal-TCP" $i]
+        set ftp [new Application/FTP]
+        $ftp attach-agent $tcp
+        $ns at 0.5 "$ftp start"
+        $ns at 9.5 "$ftp stop"
 
     } else {
-        # --- Student Portal: UDP/CBR (Profile updates, announcements) ---
-        set udp_agent [new Agent/UDP]
-        set udp_null  [new Agent/Null]
-        $ns attach-agent $student          $udp_agent
-        $ns attach-agent $elearning_server $udp_null
-        $ns connect $udp_agent $udp_null
-        $udp_agent set fid_ 4
+        # Flow 3: Student Portal (UDP / CBR)
+        set udp [new Agent/UDP]
+        set null [new Agent/Null]
+        $udp set fid_ 3
+        $ns attach-agent $s $udp
+        $ns attach-agent $server $null
+        $ns connect $udp $null
 
-        set cbr_app [new Application/Traffic/CBR]
-        $cbr_app set packetSize_ 512
-        $cbr_app set rate_       "256Kb"
-        $cbr_app attach-agent $udp_agent
-        $ns at [expr 0.25 + $i * 0.05] "$cbr_app start"
-        $ns at 9.5                      "$cbr_app stop"
-        lappend traffic_flows [list "StudentPortal-UDP" $i]
+        set cbr [new Application/Traffic/CBR]
+        $cbr set packetSize_ 512
+        $cbr set rate_ 256Kb
+        $cbr attach-agent $udp
+        $ns at 0.5 "$cbr start"
+        $ns at 9.5 "$cbr stop"
     }
 }
 
-# -------------------- Congestion Simulation (High Traffic Trigger) ------------
-# Simulate a burst event at t=5s to trigger congestion
-proc inject_burst {ns server students} {
-    set burst_count 3
-    for {set b 0} {$b < $burst_count} {incr b} {
-        set bidx [expr int(rand() * [llength $students])]
-        set bs [lindex $students $bidx]
-        set btcp [new Agent/UDP]
-        set bsink [new Agent/Null]
-        $ns attach-agent $bs     $btcp
-        $ns attach-agent $server $bsink
-        $ns connect $btcp $bsink
-        set bcbr [new Application/Traffic/CBR]
-        $bcbr set packetSize_ 1500
-        $bcbr set rate_ "2Mb"
-        $bcbr attach-agent $btcp
-        $ns at 5.0 "$bcbr start"
-        $ns at 6.0 "$bcbr stop"
-    }
-}
-
-inject_burst $ns $elearning_server $students
-
-# -------------------- NAM Topology Layout ------------------------------------
-$ns duplex-link-op $elearning_server $gateway        orient right
-$ns duplex-link-op $gateway          $core_switch    orient right
-$ns duplex-link-op $core_switch      $access_switch1 orient right-up
-$ns duplex-link-op $core_switch      $access_switch2 orient right-down
-
-# -------------------- Simulation Control ------------------------------------
+# --------------------------------------------------------------------
+# 4. Finish Procedure
+# --------------------------------------------------------------------
 proc finish {} {
     global ns tracefile namfile
     $ns flush-trace
     close $tracefile
     close $namfile
-    puts "Simulation complete. Trace: elearning_output.tr | NAM: elearning_output.nam"
-    puts "Run AWK scripts to extract performance metrics."
-    exec nam elearning_output.nam &
+    puts "Simulation finished."
+    puts "Trace file generated: elearning_output.tr"
+    puts "To analyze throughput: awk -f ../awk_scripts/throughput.awk elearning_output.tr"
+    puts "To analyze delay     : awk -f ../awk_scripts/delay.awk elearning_output.tr"
+    puts "To analyze loss/PDR  : awk -f ../awk_scripts/packet_loss.awk elearning_output.tr"
     exit 0
 }
 
 $ns at 10.0 "finish"
 $ns run
-
-# =============================================================================
-# HOW TO RUN (Linux/WSL):
-#   ns elearning_topology.tcl
-#
-# TO CHANGE TRAFFIC LOAD:
-#   Low    traffic: set num_students 10
-#   Medium traffic: set num_students 30
-#   High   traffic: set num_students 100
-#
-# THEN ANALYZE:
-#   awk -f ../awk_scripts/throughput.awk  elearning_output.tr
-#   awk -f ../awk_scripts/delay.awk       elearning_output.tr
-#   awk -f ../awk_scripts/packet_loss.awk elearning_output.tr
-# =============================================================================
