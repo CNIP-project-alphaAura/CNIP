@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Performance Analysis - University E-Learning System</title>
+  <title>University E-Learning Network Simulator (NS-2)</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <!-- NAV -->
   <header class="top-nav">
     <div class="nav-container">
       <div class="brand">
         <span class="brand-icon">🎓</span>
         <div class="brand-text">
           <span class="brand-title">E-Learning NetSim</span>
-          <span class="brand-subtitle">University Network Performance (NS-2)</span>
+          <span class="brand-subtitle">NS-2 Simulator</span>
         </div>
       </div>
       <nav class="nav-menu" id="nav-menu">
@@ -29,352 +29,276 @@
         <a href="#graphs" class="nav-link" data-tab="graphs">Graphs</a>
         <a href="#results" class="nav-link" data-tab="results">Results</a>
       </nav>
-      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">☰</button>
+      <button class="mobile-toggle" id="mobile-toggle">☰</button>
     </div>
   </header>
 
-  <!-- ================= MAIN CONTAINER ================= -->
+  <!-- MAIN -->
   <main class="main-content">
 
-    <!-- 1. HOME / OVERVIEW SECTION -->
+    <!-- 1. HOME -->
     <section id="home" class="tab-section active">
       <div class="hero-banner">
-        <span class="badge">Computer Networks & Internet Protocols</span>
-        <h1>Network Performance Analysis of a University E-Learning System</h1>
+        <span class="badge">NS-2 Network Project</span>
+        <h1>University E-Learning Network Performance</h1>
         <p class="hero-desc">
-          When hundreds of students attend live classes, stream video lectures, check portals, and submit online exams simultaneously, network bandwidth gets choked. This project simulates and analyzes network congestion, delay, and packet loss using <strong>NS-2 (Network Simulator 2)</strong>, and demonstrates how algorithms like <strong>Go-Back-N</strong> and <strong>Leaky Bucket</strong> ensure reliable and smooth communication.
+          How campus internet handles <strong>10, 50, and 100 students</strong> on LMS, Video, Exams, and Portals.
         </p>
         <div class="hero-actions">
           <a href="#simulation" class="btn btn-primary" onclick="switchTab('simulation')">⚡ Run Simulation</a>
-          <a href="#topology" class="btn btn-secondary" onclick="switchTab('topology')">🗺️ View Network Topology</a>
+          <a href="#graphs" class="btn btn-secondary" onclick="switchTab('graphs')">📊 View Graphs</a>
         </div>
       </div>
 
-      <!-- Quick KPI Cards -->
+      <!-- Quick Numbers -->
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-icon blue">🚀</div>
           <div class="kpi-content">
-            <span class="kpi-label">Peak Network Speed</span>
-            <span class="kpi-value" id="kpi-tput">454 Mbps</span>
-            <span class="kpi-hint">Maximum observed throughput</span>
+            <span class="kpi-label">Max Speed</span>
+            <span class="kpi-value">454 Mbps</span>
+            <span class="kpi-hint">Peak throughput</span>
           </div>
         </div>
         <div class="kpi-card">
           <div class="kpi-icon green">⏱️</div>
           <div class="kpi-content">
-            <span class="kpi-label">Average Waiting Time</span>
-            <span class="kpi-value" id="kpi-delay">63.8 ms</span>
-            <span class="kpi-hint">Acceptable end-to-end delay</span>
+            <span class="kpi-label">Average Delay</span>
+            <span class="kpi-value">63.8 ms</span>
+            <span class="kpi-hint">Low waiting time</span>
           </div>
         </div>
         <div class="kpi-card">
           <div class="kpi-icon purple">📦</div>
           <div class="kpi-content">
-            <span class="kpi-label">Packet Delivery (Low Load)</span>
-            <span class="kpi-value" id="kpi-pdr">99.5%</span>
-            <span class="kpi-hint">Reliable transmission under 10 users</span>
+            <span class="kpi-label">Delivery Rate</span>
+            <span class="kpi-value">99.5%</span>
+            <span class="kpi-hint">Low load delivery</span>
           </div>
         </div>
         <div class="kpi-card">
           <div class="kpi-icon red">🛡️</div>
           <div class="kpi-content">
-            <span class="kpi-label">Traffic Shaper Protection</span>
-            <span class="kpi-value" id="kpi-lb">0% Drops</span>
-            <span class="kpi-hint">Zero loss with Leaky Bucket</span>
+            <span class="kpi-label">Leaky Bucket</span>
+            <span class="kpi-value">0% Loss</span>
+            <span class="kpi-hint">Drops prevented</span>
           </div>
         </div>
       </div>
 
-      <!-- Overview Cards -->
-      <div class="card mt-6">
-        <div class="card-header">
-          <h2>📋 Problem Statement & Purpose</h2>
+      <!-- Traffic Loads -->
+      <div class="scenarios-row mt-4">
+        <div class="scenario-box green-border">
+          <span class="scenario-tag green">🟢 Low (10 Students)</span>
+          <p>Fast & smooth. Loss &lt; 0.6%.</p>
         </div>
-        <div class="card-body">
-          <p>
-            University e-learning systems provide four core services: <strong>Online Classes</strong>, <strong>Video Lectures</strong>, <strong>Learning Management System (LMS)</strong>, <strong>Student Portal</strong>, and <strong>Online Examination Portal</strong>.
-          </p>
-          <div class="scenarios-row">
-            <div class="scenario-box green-border">
-              <span class="scenario-tag green">🟢 Low Load (10 Students)</span>
-              <p>Normal operating hours. Network runs smoothly with under <strong>0.6% packet loss</strong> and high delivery ratio (99.5%).</p>
-            </div>
-            <div class="scenario-box yellow-border">
-              <span class="scenario-tag yellow">🟡 Medium Load (50 Students)</span>
-              <p>Peak lecture hours. Router queue fills up, causing slight delay and <strong>~5.5% packet loss</strong> as students stream lectures.</p>
-            </div>
-            <div class="scenario-box red-border">
-              <span class="scenario-tag red">🔴 High Load (100 Students)</span>
-              <p>Exam submission deadline. Bottleneck link saturates completely, causing queue overflow and <strong>>17% packet loss</strong> without traffic shaping.</p>
-            </div>
-          </div>
+        <div class="scenario-box yellow-border">
+          <span class="scenario-tag yellow">🟡 Medium (50 Students)</span>
+          <p>Peak lecture hour. ~5.5% loss.</p>
+        </div>
+        <div class="scenario-box red-border">
+          <span class="scenario-tag red">🔴 High (100 Students)</span>
+          <p>Exam rush. Buffer overflow, 17% loss.</p>
         </div>
       </div>
     </section>
 
-    <!-- 2. NETWORK TOPOLOGY SECTION -->
+    <!-- 2. TOPOLOGY -->
     <section id="topology" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>🗺️ University E-Learning Network Architecture</h2>
-          <p class="text-muted">Simulated node architecture created in NS-2 (`elearning_topology.tcl`)</p>
+          <h2>🗺️ Network Topology</h2>
+          <p class="text-muted">NS-2 Nodes Setup (`elearning_topology.tcl`)</p>
         </div>
         <div class="card-body">
-          <!-- Visual Topology Schematic -->
           <div class="topology-diagram">
             <div class="topo-node server">
               <div class="node-icon">🏛️</div>
-              <div class="node-name">University Server</div>
-              <div class="node-role">Node 0 &middot; Hosts LMS, Exam & Video</div>
+              <div class="node-name">Server (Node 0)</div>
+              <div class="node-role">LMS, Video, Exams</div>
             </div>
-
-            <div class="topo-link core-link">
-              <span class="link-label">Core Link (10 Mbps &middot; 5ms)</span>
+            <div class="topo-link">
+              <span class="link-label">10 Mbps &middot; 5ms</span>
               <div class="link-line"></div>
             </div>
-
             <div class="topo-node router">
               <div class="node-icon">🔀</div>
-              <div class="node-name">Campus Core Router</div>
-              <div class="node-role">Node 1 &middot; Bottleneck Gateway</div>
+              <div class="node-name">Router (Node 1)</div>
+              <div class="node-role">Bottleneck Gateway</div>
             </div>
-
-            <div class="topo-link student-link">
-              <span class="link-label">Access Links (2 Mbps each)</span>
+            <div class="topo-link">
+              <span class="link-label">2 Mbps Links</span>
               <div class="link-line"></div>
             </div>
-
-            <div class="topo-students">
-              <div class="topo-node student">
-                <div class="node-icon">💻</div>
-                <div class="node-name">Student Nodes</div>
-                <div class="node-role">Nodes 2..N &middot; 10, 50, or 100 Users</div>
-              </div>
+            <div class="topo-node student">
+              <div class="node-icon">💻</div>
+              <div class="node-name">Students (2..N)</div>
+              <div class="node-role">10, 50, 100 Users</div>
             </div>
           </div>
 
-          <!-- Services Breakdown Grid -->
-          <h3 class="mt-6">University Network Services & Protocols</h3>
-          <div class="grid-4 mt-3">
+          <!-- Services Grid -->
+          <div class="grid-4 mt-4">
             <div class="service-card">
-              <div class="service-badge blue-badge">TCP FTP</div>
-              <h4>Learning Management (LMS)</h4>
-              <p>File submissions, assignment downloads. Requires 100% reliable delivery with ACK confirmation.</p>
+              <span class="service-badge blue-badge">TCP FTP</span>
+              <h4>LMS</h4>
+              <p>100% reliable assignment uploads.</p>
             </div>
             <div class="service-card">
-              <div class="service-badge purple-badge">TCP Reno</div>
-              <h4>Examination Portal</h4>
-              <p>Timed tests & question papers. Zero loss tolerance; uses congestion window flow control.</p>
+              <span class="service-badge purple-badge">TCP Reno</span>
+              <h4>Exam Portal</h4>
+              <p>Zero lost answers.</p>
             </div>
             <div class="service-card">
-              <div class="service-badge red-badge">UDP / CBR</div>
-              <h4>Video Lectures & Classes</h4>
-              <p>Real-time video streaming. Prioritizes low delay; tolerates minor packet drops without stopping.</p>
+              <span class="service-badge red-badge">UDP / CBR</span>
+              <h4>Video Lectures</h4>
+              <p>Fast streaming, low delay.</p>
             </div>
             <div class="service-card">
-              <div class="service-badge green-badge">UDP / CBR</div>
+              <span class="service-badge green-badge">UDP / CBR</span>
               <h4>Student Portal</h4>
-              <p>Profile updates, notice boards. Lightweight, rapid data access with minimal overhead.</p>
+              <p>Fast, lightweight notices.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. SIMULATION PAGE -->
+    <!-- 3. SIMULATION -->
     <section id="simulation" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>⚡ Interactive Simulation Control Center</h2>
-          <p class="text-muted">Select student load and protocol to inspect network performance directly from simulation datasets</p>
+          <h2>⚡ Simulation Center</h2>
+          <p class="text-muted">Select load and click run to see live results</p>
         </div>
         <div class="card-body">
           <div class="sim-controls-panel">
             <div class="control-group">
-              <label>1. Select Number of Students:</label>
+              <label>Students:</label>
               <div class="pill-group" id="user-count-pills">
-                <button class="pill-btn active" data-users="10">10 Students (Low)</button>
-                <button class="pill-btn" data-users="50">50 Students (Medium)</button>
-                <button class="pill-btn" data-users="100">100 Students (High)</button>
+                <button class="pill-btn active" data-users="10">10 Students</button>
+                <button class="pill-btn" data-users="50">50 Students</button>
+                <button class="pill-btn" data-users="100">100 Students</button>
               </div>
             </div>
 
             <div class="control-group">
-              <label>2. Select Protocol Type:</label>
+              <label>Protocol:</label>
               <div class="pill-group" id="protocol-pills">
-                <button class="pill-btn active" data-proto="TCP">TCP (LMS & Exams)</button>
-                <button class="pill-btn" data-proto="UDP">UDP (Video & Portal)</button>
+                <button class="pill-btn active" data-proto="TCP">TCP</button>
+                <button class="pill-btn" data-proto="UDP">UDP</button>
               </div>
             </div>
 
             <div class="control-group action-group">
-              <button class="btn btn-primary" id="btn-run-sim">▶ Run Network Simulation</button>
+              <button class="btn btn-primary" id="btn-run-sim">▶ Run Simulation</button>
             </div>
           </div>
 
-          <!-- Simulation Live Status & Metrics -->
-          <div class="sim-status-box mt-4" id="sim-status-box" style="display: none;">
+          <!-- Progress -->
+          <div class="sim-status-box mt-3" id="sim-status-box" style="display: none;">
             <div class="progress-bar-wrap">
               <div class="progress-bar-fill" id="sim-progress-fill"></div>
             </div>
-            <span class="sim-status-text" id="sim-status-text">Simulating packets in NS-2...</span>
+            <span class="sim-status-text" id="sim-status-text">Simulating in NS-2...</span>
           </div>
 
+          <!-- Live KPI Results -->
           <div class="results-kpi-grid mt-4">
             <div class="result-card">
-              <div class="res-title">Network Speed (Throughput)</div>
-              <div class="res-num" id="res-tput">4,610.66 Kbps</div>
+              <div class="res-title">Speed (Throughput)</div>
+              <div class="res-num" id="res-tput">4,610 Kbps</div>
               <div class="res-sub text-muted" id="res-tput-mbps">4.61 Mbps</div>
             </div>
             <div class="result-card">
-              <div class="res-title">Waiting Time (Delay)</div>
+              <div class="res-title">Delay</div>
               <div class="res-num" id="res-delay">63.96 ms</div>
-              <div class="res-sub text-muted">End-to-end latency</div>
+              <div class="res-sub text-muted">Waiting time</div>
             </div>
             <div class="result-card">
-              <div class="res-title">Lost Data (Packet Loss)</div>
+              <div class="res-title">Packet Loss</div>
               <div class="res-num text-danger" id="res-loss">0.55%</div>
-              <div class="res-sub text-muted" id="res-dropped-count">23 packets dropped</div>
+              <div class="res-sub text-muted" id="res-dropped-count">23 dropped</div>
             </div>
             <div class="result-card">
-              <div class="res-title">Delivery Rate (PDR)</div>
+              <div class="res-title">Delivery Rate</div>
               <div class="res-num text-success" id="res-pdr">99.45%</div>
-              <div class="res-sub text-muted" id="res-recv-count">4,181 packets received</div>
+              <div class="res-sub text-muted" id="res-recv-count">4,181 received</div>
             </div>
           </div>
 
-          <!-- Animated Network Packet Pipe -->
-          <div class="packet-pipe-visual mt-5">
-            <h4>Live Packet Transmission Pipeline</h4>
-            <div class="pipe-container" id="pipe-container">
-              <div class="pipe-label left">Students (Senders)</div>
-              <div class="pipe-track" id="pipe-track">
-                <!-- Packets animated dynamically via JS -->
-              </div>
-              <div class="pipe-label right">Server (Destination)</div>
+          <!-- Visual Pipe -->
+          <div class="packet-pipe-visual mt-4">
+            <div class="pipe-container">
+              <span class="pipe-label">Students</span>
+              <div class="pipe-track" id="pipe-track"></div>
+              <span class="pipe-label">Server</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. TCP VS UDP COMPARISON -->
+    <!-- 4. TCP VS UDP -->
     <section id="tcp-udp" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>🔄 TCP vs UDP Protocol Comparison</h2>
-          <p class="text-muted">How reliable delivery compares against real-time streaming under student traffic</p>
+          <h2>🔄 TCP vs UDP</h2>
         </div>
         <div class="card-body">
           <div class="grid-2">
-            <!-- TCP Card -->
             <div class="proto-card tcp">
               <div class="proto-header">
-                <h3>TCP (Transmission Control Protocol)</h3>
-                <span class="proto-badge">Reliable &middot; Connection-Oriented</span>
+                <h3>TCP (Reliable)</h3>
+                <span class="proto-badge">LMS & Exams</span>
               </div>
-              <p class="proto-desc">
-                TCP guarantees that every single packet is received intact. If a packet is lost, the sender halts and retransmits it.
-              </p>
               <ul class="proto-features">
-                <li>✅ <strong>100% Reliable Delivery:</strong> Perfect for assignments & exam papers.</li>
-                <li>✅ <strong>Congestion Avoidance:</strong> Automatically slows down when network clogs.</li>
-                <li>⚠️ <strong>Slight Delay:</strong> Waits for acknowledgements (ACKs) before proceeding.</li>
-                <li>🏛️ <strong>Used By:</strong> Learning Management System (LMS) & Online Exam Portal.</li>
+                <li>✅ <strong>100% Delivery:</strong> Retransmits if lost.</li>
+                <li>✅ <strong>Flow Control:</strong> Slows down under congestion.</li>
+                <li>⚠️ <strong>Slight Delay:</strong> Waits for ACKs.</li>
               </ul>
             </div>
-
-            <!-- UDP Card -->
             <div class="proto-card udp">
               <div class="proto-header">
-                <h3>UDP (User Datagram Protocol)</h3>
-                <span class="proto-badge">Fast &middot; Connectionless</span>
+                <h3>UDP (Fast Streaming)</h3>
+                <span class="proto-badge">Video & Classes</span>
               </div>
-              <p class="proto-desc">
-                UDP sends packets immediately without waiting for confirmation. If packets drop, it keeps playing the video without pausing.
-              </p>
               <ul class="proto-features">
-                <li>⚡ <strong>Ultra Low Latency:</strong> Immediate delivery without round-trip waits.</li>
-                <li>📺 <strong>Smooth Streaming:</strong> Live classes continue playing smoothly.</li>
-                <li>⚠️ <strong>No Retransmission:</strong> Dropped packets are permanently lost.</li>
-                <li>📹 <strong>Used By:</strong> Video Lectures, Zoom / Live Classes, Announcements.</li>
+                <li>⚡ <strong>Low Delay:</strong> Sends immediately.</li>
+                <li>📺 <strong>Smooth Video:</strong> No pause on packet drop.</li>
+                <li>⚠️ <strong>No Retransmit:</strong> Lost packets are gone.</li>
               </ul>
             </div>
           </div>
 
-          <!-- Comparison Table -->
-          <h3 class="mt-6">Performance Comparison Across User Loads</h3>
-          <div class="table-responsive mt-3">
+          <div class="table-responsive mt-4">
             <table>
               <thead>
                 <tr>
-                  <th>Students</th>
+                  <th>Load</th>
                   <th>Metric</th>
-                  <th>TCP (Reliable)</th>
-                  <th>UDP (Streaming)</th>
-                  <th>Verdict</th>
+                  <th>TCP</th>
+                  <th>UDP</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td rowspan="3"><strong>10 Students</strong><br>(Low Load)</td>
-                  <td>Speed (Throughput)</td>
-                  <td>4.61 Mbps</td>
-                  <td>4.61 Mbps</td>
-                  <td>Equal speed; plenty of bandwidth</td>
+                  <td><strong>10 Students</strong></td>
+                  <td>Speed / Delay / Loss</td>
+                  <td>4.61 Mbps &middot; 63.9 ms &middot; 0.55%</td>
+                  <td>4.61 Mbps &middot; 63.8 ms &middot; 0.70%</td>
                 </tr>
                 <tr>
-                  <td>Delay (Waiting Time)</td>
-                  <td>63.96 ms</td>
-                  <td>63.83 ms</td>
-                  <td>Both experience negligible delay</td>
+                  <td><strong>50 Students</strong></td>
+                  <td>Speed / Delay / Loss</td>
+                  <td>78.24 Mbps &middot; 65.2 ms &middot; 5.46%</td>
+                  <td>78.91 Mbps &middot; 65.1 ms &middot; 5.51%</td>
                 </tr>
                 <tr>
-                  <td>Packet Loss (PLR)</td>
-                  <td>0.55%</td>
-                  <td>0.70%</td>
-                  <td>Near-zero loss on both</td>
-                </tr>
-
-                <tr>
-                  <td rowspan="3"><strong>50 Students</strong><br>(Medium Load)</td>
-                  <td>Speed (Throughput)</td>
-                  <td>78.24 Mbps</td>
-                  <td>78.91 Mbps</td>
-                  <td>Both stream efficiently</td>
-                </tr>
-                <tr>
-                  <td>Delay (Waiting Time)</td>
-                  <td>65.20 ms</td>
-                  <td>65.15 ms</td>
-                  <td>Mild queueing delay</td>
-                </tr>
-                <tr>
-                  <td>Packet Loss (PLR)</td>
-                  <td>5.46%</td>
-                  <td>5.51%</td>
-                  <td>Queue drops start occurring</td>
-                </tr>
-
-                <tr>
-                  <td rowspan="3"><strong>100 Students</strong><br>(High Load)</td>
-                  <td>Speed (Throughput)</td>
-                  <td>453.54 Mbps</td>
-                  <td>454.12 Mbps</td>
-                  <td>Bottleneck reached (link saturated)</td>
-                </tr>
-                <tr>
-                  <td>Delay (Waiting Time)</td>
-                  <td>62.44 ms</td>
-                  <td>62.41 ms</td>
-                  <td>Queue drops packets to prevent delay bloat</td>
-                </tr>
-                <tr>
-                  <td>Packet Loss (PLR)</td>
-                  <td>17.04%</td>
-                  <td>17.12%</td>
-                  <td>Severe congestion without shaping</td>
+                  <td><strong>100 Students</strong></td>
+                  <td>Speed / Delay / Loss</td>
+                  <td>453.5 Mbps &middot; 62.4 ms &middot; 17.04%</td>
+                  <td>454.1 Mbps &middot; 62.4 ms &middot; 17.12%</td>
                 </tr>
               </tbody>
             </table>
@@ -383,50 +307,35 @@
       </div>
     </section>
 
-    <!-- 5. SLIDING WINDOW DEMONSTRATION -->
+    <!-- 5. SLIDING WINDOW -->
     <section id="sliding-window" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>🪟 Sliding Window Algorithm Demonstration</h2>
-          <p class="text-muted">How network senders transmit multiple packets without waiting for individual ACKs</p>
+          <h2>🪟 Sliding Window</h2>
+          <p class="text-muted">Sends packets in batches without waiting one-by-one</p>
         </div>
         <div class="card-body">
-          <div class="algorithm-explainer">
-            <p>
-              In simple communication (Stop-and-Wait), the sender sends 1 packet and waits for an acknowledgement (ACK) before sending the next one. This is very slow!
-            </p>
-            <p>
-              With <strong>Sliding Window</strong>, the sender can transmit a whole "window" of packets (e.g. 4 packets) consecutively. As each ACK arrives from the receiver, the window slides forward to transmit the next packet immediately.
-            </p>
-          </div>
-
-          <!-- Interactive Visualizer -->
           <div class="visualizer-box">
             <div class="visualizer-header">
               <div class="viz-controls">
                 <button class="btn btn-sm btn-primary" id="btn-sw-play">▶ Auto Play</button>
-                <button class="btn btn-sm btn-secondary" id="btn-sw-step">⏭ Step Forward</button>
+                <button class="btn btn-sm btn-secondary" id="btn-sw-step">⏭ Step</button>
                 <button class="btn btn-sm btn-outline" id="btn-sw-reset">🔄 Reset</button>
               </div>
-              <div class="viz-status" id="sw-status-text">Ready. Click 'Step Forward' or 'Auto Play'.</div>
+              <div class="viz-status" id="sw-status-text">Ready. Window Size W = 4.</div>
             </div>
 
-            <!-- Frames Track -->
             <div class="frames-track-wrapper">
-              <span class="track-title">Sender Buffer (Window Size W = 4):</span>
-              <div class="frames-track" id="sw-frames-track">
-                <!-- Frame items inserted via JS -->
-              </div>
+              <div class="frames-track" id="sw-frames-track"></div>
             </div>
 
-            <!-- Flight Animation -->
-            <div class="flight-area" id="sw-flight-area">
+            <div class="flight-area">
               <div class="flight-lane">
-                <span class="lane-label">Data Packets (Sender ➔ Receiver)</span>
+                <span class="lane-label">Packets ➔</span>
                 <div class="flight-channel" id="sw-packet-channel"></div>
               </div>
               <div class="flight-lane">
-                <span class="lane-label">Acknowledgements (Receiver ➔ Sender)</span>
+                <span class="lane-label">ACKs ⬅</span>
                 <div class="flight-channel" id="sw-ack-channel"></div>
               </div>
             </div>
@@ -435,112 +344,87 @@
       </div>
     </section>
 
-    <!-- 6. GO-BACK-N DEMONSTRATION -->
+    <!-- 6. GO-BACK-N -->
     <section id="gobackn" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>🔁 Go-Back-N ARQ Demonstration</h2>
-          <p class="text-muted">What happens when a packet is dropped, and how the sender recovers</p>
+          <h2>🔁 Go-Back-N (Error Recovery)</h2>
+          <p class="text-muted">Retransmits lost packets and following frames</p>
         </div>
         <div class="card-body">
-          <div class="algorithm-explainer">
-            <p>
-              In <strong>Go-Back-N</strong>, when a packet is lost in transit, the receiver refuses to accept subsequent packets out of order. When the sender's timer expires, it <strong>"goes back" to the lost packet</strong> and retransmits it and all following packets in the window.
-            </p>
-          </div>
-
-          <!-- Interactive GBN Visualizer -->
           <div class="visualizer-box">
             <div class="visualizer-header">
               <div class="viz-controls">
                 <button class="btn btn-sm btn-danger" id="btn-gbn-drop">💥 Drop Packet #3</button>
-                <button class="btn btn-sm btn-primary" id="btn-gbn-step">⏭ Next Step</button>
+                <button class="btn btn-sm btn-primary" id="btn-gbn-step">⏭ Step</button>
                 <button class="btn btn-sm btn-outline" id="btn-gbn-reset">🔄 Reset</button>
               </div>
-              <div class="viz-status" id="gbn-status-text">Click "Drop Packet #3" then "Next Step" to see Go-Back-N retransmission!</div>
+              <div class="viz-status" id="gbn-status-text">Click "Drop Packet #3" then "Step"</div>
             </div>
 
-            <!-- GBN Frames Track -->
             <div class="frames-track-wrapper">
-              <span class="track-title">Go-Back-N Transmission Window (W = 4):</span>
-              <div class="frames-track" id="gbn-frames-track">
-                <!-- Rendered dynamically via JS -->
-              </div>
+              <div class="frames-track" id="gbn-frames-track"></div>
             </div>
 
             <div class="gbn-explanation-box mt-3" id="gbn-step-explanation">
-              <strong>Step 0:</strong> Packets #0, #1, #2, #3 are ready to transmit.
+              <strong>Step 0:</strong> Packets #0, #1, #2, #3 ready.
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 7. LEAKY BUCKET DEMONSTRATION -->
+    <!-- 7. LEAKY BUCKET -->
     <section id="leaky-bucket" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>🪣 Leaky Bucket Traffic Shaping Demonstration</h2>
-          <p class="text-muted">How video traffic bursts are converted into a steady, reliable stream to eliminate congestion</p>
+          <h2>🪣 Leaky Bucket (Traffic Shaper)</h2>
+          <p class="text-muted">Smooths video bursts into steady flow</p>
         </div>
         <div class="card-body">
-          <div class="algorithm-explainer">
-            <p>
-              Students starting high-definition video lectures create sudden, heavy traffic spikes (4 to 5 Mbps). A normal router queue overflows, dropping more than <strong>50% of the packets</strong>.
-            </p>
-            <p>
-              The <strong>Leaky Bucket algorithm</strong> absorbs these bursts into a buffer (the bucket) and releases packets into the network at a steady, constant <strong>leak rate</strong> (1 Mbps), preventing queue overflow and achieving <strong>0% packet loss</strong>!
-            </p>
-          </div>
-
-          <!-- Leaky Bucket Widget -->
           <div class="leaky-bucket-widget">
             <div class="lb-controls">
-              <button class="btn btn-primary" id="btn-lb-burst">⚡ Send Heavy Burst (4 Mbps)</button>
-              <button class="btn btn-secondary" id="btn-lb-normal">💧 Send Steady Flow (1 Mbps)</button>
-              <button class="btn btn-outline" id="btn-lb-reset">🔄 Empty Bucket</button>
+              <button class="btn btn-primary" id="btn-lb-burst">⚡ Send Burst (4 Mbps)</button>
+              <button class="btn btn-secondary" id="btn-lb-normal">💧 Send Normal (1 Mbps)</button>
+              <button class="btn btn-outline" id="btn-lb-reset">🔄 Reset</button>
             </div>
 
             <div class="lb-animation-stage">
-              <!-- Tap / Inflow -->
               <div class="lb-inflow-side">
-                <span class="lb-stage-label">Student Video Stream (Input)</span>
-                <div class="pipe-faucet" id="lb-inflow-pipe">Incoming Flow: Idle</div>
+                <span class="lb-stage-label">Input</span>
+                <div class="pipe-faucet" id="lb-inflow-pipe">Idle</div>
               </div>
 
-              <!-- The Bucket -->
               <div class="lb-bucket-container">
-                <div class="lb-bucket-rim">Bucket Capacity: 50 Packets</div>
-                <div class="lb-bucket-body" id="lb-bucket-body">
+                <div class="lb-bucket-rim">Cap: 50 Pkts</div>
+                <div class="lb-bucket-body">
                   <div class="lb-water-fill" id="lb-water-fill" style="height: 0%;"></div>
                   <span class="lb-level-text" id="lb-level-text">0 / 50</span>
                 </div>
-                <div class="lb-leak-hole">⬇ Steady Leak Rate: 10 pkts/s (1 Mbps)</div>
+                <div class="lb-leak-hole">⬇ Steady Leak (1 Mbps)</div>
               </div>
 
-              <!-- Output Stream -->
               <div class="lb-outflow-side">
-                <span class="lb-stage-label">Campus Network (Output)</span>
-                <div class="pipe-faucet smooth" id="lb-outflow-pipe">Output: Smooth & Constant</div>
+                <span class="lb-stage-label">Output</span>
+                <div class="pipe-faucet smooth">Steady Stream</div>
               </div>
             </div>
 
-            <!-- Stats Bar -->
             <div class="lb-stats-row">
               <div class="lb-stat-item">
-                <span class="lbl">Total Arrived</span>
+                <span class="lbl">Arrived</span>
                 <span class="val" id="lb-stat-arrived">0</span>
               </div>
               <div class="lb-stat-item">
-                <span class="lbl">Successfully Leaked</span>
+                <span class="lbl">Leaked</span>
                 <span class="val text-success" id="lb-stat-leaked">0</span>
               </div>
               <div class="lb-stat-item">
-                <span class="lbl">Overflow Packets Dropped</span>
+                <span class="lbl">Dropped</span>
                 <span class="val text-danger" id="lb-stat-dropped">0</span>
               </div>
               <div class="lb-stat-item">
-                <span class="lbl">Packet Loss Rate</span>
+                <span class="lbl">Loss Rate</span>
                 <span class="val" id="lb-stat-loss-rate">0.0%</span>
               </div>
             </div>
@@ -549,146 +433,84 @@
       </div>
     </section>
 
-    <!-- 8. PERFORMANCE GRAPHS -->
+    <!-- 8. GRAPHS -->
     <section id="graphs" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>📊 Performance Analysis Graphs</h2>
-          <p class="text-muted">Generated using Matplotlib from actual NS-2 trace file analysis datasets</p>
+          <h2>📊 Performance Graphs</h2>
+          <p class="text-muted">NS-2 simulation plots</p>
         </div>
         <div class="card-body">
           <div class="graphs-grid">
             <div class="graph-box">
-              <div class="graph-title">Chart 1: Throughput vs User Load (TCP vs UDP)</div>
-              <img src="outputs/graphs/chart1_throughput_vs_load.png" alt="Throughput vs Traffic Load">
-              <p class="graph-explanation">
-                <strong>Plain English:</strong> Shows network speed as student count grows from 10 to 100. Both TCP and UDP utilize available bandwidth until the bottleneck link saturates.
-              </p>
+              <div class="graph-title">1. Throughput (Speed)</div>
+              <img src="outputs/graphs/chart1_throughput_vs_load.png" alt="Throughput">
+              <p class="graph-explanation">Speed scales with students until 10 Mbps bottleneck saturates.</p>
             </div>
-
             <div class="graph-box">
-              <div class="graph-title">Chart 2: End-to-End Delay vs Number of Users</div>
-              <img src="outputs/graphs/chart2_delay_vs_load.png" alt="Delay vs Number of Users">
-              <p class="graph-explanation">
-                <strong>Plain English:</strong> Waiting time stays comfortably below the 100 ms threshold under normal usage, ensuring smooth video calls and exam submissions.
-              </p>
+              <div class="graph-title">2. Delay (Waiting Time)</div>
+              <img src="outputs/graphs/chart2_delay_vs_load.png" alt="Delay">
+              <p class="graph-explanation">Average delay stays below 100 ms target threshold.</p>
             </div>
-
             <div class="graph-box">
-              <div class="graph-title">Chart 3: Packet Loss Rate vs User Load</div>
-              <img src="outputs/graphs/chart3_packet_loss_vs_load.png" alt="Packet Loss Rate vs User Load">
-              <p class="graph-explanation">
-                <strong>Plain English:</strong> When 100 students connect at once, the router queue overflows, causing packet drops to jump to over 17%.
-              </p>
+              <div class="graph-title">3. Packet Loss</div>
+              <img src="outputs/graphs/chart3_packet_loss_vs_load.png" alt="Loss">
+              <p class="graph-explanation">Surges to 17% at 100 students due to full router queue.</p>
             </div>
-
             <div class="graph-box">
-              <div class="graph-title">Chart 4: Packet Delivery Ratio (PDR %)</div>
-              <img src="outputs/graphs/chart4_pdr_comparison.png" alt="Packet Delivery Ratio Comparison">
-              <p class="graph-explanation">
-                <strong>Plain English:</strong> Under low load, 99.5% of packets arrive safely. Under high load, delivery drops to ~83% without traffic regulation.
-              </p>
+              <div class="graph-title">4. Packet Delivery Ratio</div>
+              <img src="outputs/graphs/chart4_pdr_comparison.png" alt="PDR">
+              <p class="graph-explanation">99.5% delivery under 10 users; ~83% under 100 users.</p>
             </div>
-
             <div class="graph-box">
-              <div class="graph-title">Chart 5: Leaky Bucket Traffic Shaping Impact</div>
-              <img src="outputs/graphs/chart5_leaky_bucket_impact.png" alt="Leaky Bucket Impact">
-              <p class="graph-explanation">
-                <strong>Plain English:</strong> Unregulated video bursts flood the router and drop 57% of data. The Leaky Bucket buffers bursts and releases them smoothly with 0% loss.
-              </p>
+              <div class="graph-title">5. Leaky Bucket Impact</div>
+              <img src="outputs/graphs/chart5_leaky_bucket_impact.png" alt="Leaky Bucket">
+              <p class="graph-explanation">Cuts packet loss from 57% down to 0%.</p>
             </div>
-
             <div class="graph-box">
-              <div class="graph-title">Chart 6: Go-Back-N Window Size vs Transmission Efficiency</div>
-              <img src="outputs/graphs/chart6_gbn_efficiency.png" alt="Go-Back-N Window Efficiency">
-              <p class="graph-explanation">
-                <strong>Plain English:</strong> Larger window sizes transmit faster when the link is clean, but cause retransmission bursts if packet loss occurs.
-              </p>
+              <div class="graph-title">6. Go-Back-N Window Size</div>
+              <img src="outputs/graphs/chart6_gbn_efficiency.png" alt="GBN Window">
+              <p class="graph-explanation">Window W=16 gives best balance of speed and recovery.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 9. RESULTS & SUMMARY -->
+    <!-- 9. RESULTS -->
     <section id="results" class="tab-section">
       <div class="card">
         <div class="card-header">
-          <h2>📋 Summary of Results & Technical Glossary</h2>
-          <p class="text-muted">Plain English explanations of all key terms and complete simulation observations</p>
+          <h2>📋 Results & Commands</h2>
         </div>
         <div class="card-body">
-          <!-- Glossary Grid -->
-          <h3>Everyday Definitions of Technical Terms</h3>
-          <div class="grid-2 mt-3">
+          <div class="grid-2">
             <div class="term-card">
-              <h4>🚀 Throughput (Network Speed)</h4>
-              <p>The total volume of data successfully delivered to students per second, measured in <strong>Kilobits per second (Kbps)</strong> or <strong>Megabits per second (Mbps)</strong>.</p>
+              <h4>Throughput</h4>
+              <p>Network speed (Kbps/Mbps).</p>
             </div>
             <div class="term-card">
-              <h4>⏱️ End-to-End Delay (Waiting Time)</h4>
-              <p>The time it takes for a data packet to travel from the university server to the student's computer, measured in <strong>milliseconds (ms)</strong>.</p>
+              <h4>Delay</h4>
+              <p>Travel waiting time (ms).</p>
             </div>
             <div class="term-card">
-              <h4>❌ Packet Loss Rate (Lost Data)</h4>
-              <p>The percentage of packets that were dropped along the way because a router's memory buffer became completely full.</p>
+              <h4>Packet Loss</h4>
+              <p>Dropped data percentage.</p>
             </div>
             <div class="term-card">
-              <h4>📦 Packet Delivery Ratio (Success Rate)</h4>
-              <p>The percentage of all transmitted packets that arrived safely at their destination: <code>(Received / Sent) &times; 100</code>.</p>
+              <h4>PDR</h4>
+              <p>Successfully delivered data percentage.</p>
             </div>
           </div>
 
-          <!-- Key Findings Table -->
-          <h3 class="mt-6">Key Findings from NS-2 Simulations</h3>
-          <div class="table-responsive mt-3">
-            <table>
-              <thead>
-                <tr>
-                  <th>Experiment</th>
-                  <th>Observed Result</th>
-                  <th>Engineering Solution</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Student Scaling (10 to 100)</strong></td>
-                  <td>Packet loss surged from 0.5% up to 17.1% as student count hit 100.</td>
-                  <td>Increase bottleneck router buffer size and link capacity.</td>
-                </tr>
-                <tr>
-                  <td><strong>TCP vs UDP</strong></td>
-                  <td>TCP retransmitted lost exam/LMS packets; UDP dropped video frames without pause.</td>
-                  <td>Use TCP for exams and assignments; use UDP for live video classes.</td>
-                </tr>
-                <tr>
-                  <td><strong>Leaky Bucket</strong></td>
-                  <td>Drops reduced from 57.7% down to 0% once bucket capacity reached 100 packets.</td>
-                  <td>Place a Leaky Bucket traffic shaper at the campus video streaming gateway.</td>
-                </tr>
-                <tr>
-                  <td><strong>Go-Back-N Window</strong></td>
-                  <td>Window size W=16 offered optimal balance between pipelined throughput and low retransmission overhead.</td>
-                  <td>Set TCP congestion window size dynamically based on link quality.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- NS-2 Commands Reference -->
-          <h3 class="mt-6">NS-2 & AWK Command Quick Reference</h3>
-          <div class="code-box mt-3">
-            <p><strong># 1. Run NS-2 Simulations in Terminal:</strong></p>
-            <code>ns ns2_simulations/elearning_topology.tcl 10   # Low Load (10 students)</code><br>
-            <code>ns ns2_simulations/elearning_topology.tcl 50   # Medium Load (50 students)</code><br>
-            <code>ns ns2_simulations/elearning_topology.tcl 100  # High Load (100 students)</code><br>
-            <code>ns ns2_simulations/go_back_n.tcl</code><br>
-            <code>ns ns2_simulations/leaky_bucket.tcl</code>
-
-            <p class="mt-3"><strong># 2. Extract Metrics with AWK:</strong></p>
-            <code>awk -f awk_scripts/throughput.awk ns2_simulations/elearning_output.tr</code><br>
-            <code>awk -f awk_scripts/delay.awk ns2_simulations/elearning_output.tr</code><br>
-            <code>awk -f awk_scripts/packet_loss.awk ns2_simulations/elearning_output.tr</code>
+          <div class="code-box mt-4">
+            <p><strong>NS-2 Commands:</strong></p>
+            <code>ns ns2_simulations/elearning_topology.tcl 10   # 10 Students</code><br>
+            <code>ns ns2_simulations/elearning_topology.tcl 50   # 50 Students</code><br>
+            <code>ns ns2_simulations/elearning_topology.tcl 100  # 100 Students</code><br>
+            <code>awk -f awk_scripts/throughput.awk elearning_output.tr</code><br>
+            <code>awk -f awk_scripts/delay.awk elearning_output.tr</code><br>
+            <code>awk -f awk_scripts/packet_loss.awk elearning_output.tr</code>
           </div>
         </div>
       </div>
@@ -696,12 +518,8 @@
 
   </main>
 
-  <!-- ================= FOOTER ================= -->
   <footer class="footer">
-    <div class="container footer-content">
-      <p><strong>Network Performance Analysis of a University E-Learning System</strong></p>
-      <p class="text-muted">Built for Computer Networks & Internet Protocols (CNIP) &middot; Powered by NS-2, AWK, Python & Matplotlib</p>
-    </div>
+    <p><strong>E-Learning Network Performance Analysis</strong> &middot; NS-2 Simulation</p>
   </footer>
 
   <script src="app.js"></script>
