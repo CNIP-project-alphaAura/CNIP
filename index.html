@@ -6,6 +6,8 @@
   <title>NetTrack · Network Performance Tracker (NS-2)</title>
   <link rel="icon" type="image/png" href="assets/logo_symbol_trans.png">
   <link rel="shortcut icon" href="favicon.ico">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,7 +32,13 @@
         <a href="#leaky-bucket" class="nav-link" data-tab="leaky-bucket">Leaky Bucket</a>
         <a href="#graphs" class="nav-link" data-tab="graphs">Graphs</a>
         <a href="#results" class="nav-link" data-tab="results">Results</a>
-      </nav>
+            </nav>
+      <div class="nav-right-actions">
+        <div id="backend-status-badge" class="backend-status-pill offline" title="Java Spring Boot REST API & MySQL Status">
+          <span class="status-dot"></span>
+          <span id="backend-status-text">Spring Boot · Connecting</span>
+        </div>
+      </div>
       <button class="mobile-toggle" id="mobile-toggle">☰</button>
     </div>
   </header>

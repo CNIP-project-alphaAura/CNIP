@@ -1,0 +1,74 @@
+{
+  "low": {
+    "label": "Low (10 users)",
+    "users": 10,
+    "TCP": {
+      "total_sent": 4204,
+      "total_received": 4181,
+      "total_dropped": 23,
+      "plr_percent": 0.547,
+      "pdr_percent": 99.453,
+      "throughput_kbps": 4610.658,
+      "avg_delay_ms": 63.9613,
+      "avg_jitter_ms": 12.7268
+    },
+    "UDP": {
+      "total_sent": 6146,
+      "total_received": 6103,
+      "total_dropped": 43,
+      "plr_percent": 0.7,
+      "pdr_percent": 99.3,
+      "throughput_kbps": 4614.451,
+      "avg_delay_ms": 63.8342,
+      "avg_jitter_ms": 12.765
+    }
+  },
+  "medium": {
+    "label": "Medium (50 users)",
+    "users": 50,
+    "TCP": {
+      "total_sent": 78920,
+      "total_received": 74610,
+      "total_dropped": 4310,
+      "plr_percent": 5.461,
+      "pdr_percent": 94.539,
+      "throughput_kbps": 78240.5,
+      "avg_delay_ms": 65.2,
+      "avg_jitter_ms": 11.9904
+    },
+    "UDP": {
+      "total_sent": 115200,
+      "total_received": 108850,
+      "total_dropped": 6350,
+      "plr_percent": 5.512,
+      "pdr_percent": 94.488,
+      "throughput_kbps": 78910.2,
+      "avg_delay_ms": 65.15,
+      "avg_jitter_ms": 11.9754
+    }
+  },
+  "high": {
+    "label": "High (100 users)",
+    "users": 100,
+    "TCP": {
+      "total_sent": 497642,
+      "total_received": 412859,
+      "total_dropped": 84783,
+      "plr_percent": 17.037,
+      "pdr_percent": 82.963,
+      "throughput_kbps": 453538.682,
+      "avg_delay_ms": 62.4415,
+      "avg_jitter_ms": 11.8537
+    },
+    "UDP": {
+      "total_sent": 726683,
+      "total_received": 602284,
+      "total_dropped": 124399,
+      "plr_percent": 17.119,
+      "pdr_percent": 82.881,
+      "throughput_kbps": 454119.76,
+      "avg_delay_ms": 62.4109,
+      "avg_jitter_ms": 11.8315
+    }
+  }
+}

@@ -1,3 +1,33 @@
+// Backend API Base URL
+const API_BASE_URL = "http://localhost:8080/api";
+let isBackendOnline = false;
+
+// Check Spring Boot & MySQL Connectivity
+async function checkBackendHealth() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/system/status`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      isBackendOnline = true;
+      updateStatusBadge(true, "Spring Boot · MySQL");
+      return data;
+    }
+  } catch (e) {
+    isBackendOnline = false;
+    updateStatusBadge(false, "Local Mode (Spring Boot: 8080)");
+  }
+  return null;
+}
+
+function updateStatusBadge(online, text) {
+  const badge = document.getElementById('backend-status-badge');
+  const label = document.getElementById('backend-status-text');
+  if (badge && label) {
+    badge.className = `backend-status-pill ${online ? 'online' : 'offline'}`;
+    label.textContent = text;
+  }
+}
+
 /**
  * ====================================================================
  * NetTrack - E-Learning Network Performance Simulator & Interactive Dashboard
@@ -85,9 +115,26 @@ function switchTab(tabId) {
    4. SIMULATION RESULTS & PACKET PIPE
    ==================================================================== */
 function updateSimulationResults() {
-  const data = SIMULATION_DATA[currentUsers][currentProtocol];
-  if (!data) return;
+  // 1. Immediately render local verified benchmark
+  const localData = SIMULATION_DATA[currentUsers][currentProtocol];
+  if (localData) {
+    applySimulationMetrics(localData);
+  }
 
+  // 2. Fetch live metrics from Spring Boot REST API if reachable
+  if (isBackendOnline) {
+    fetch(`${API_BASE_URL}/simulation/metrics?users=${currentUsers}&protocol=${currentProtocol}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(apiData => {
+        if (apiData) {
+          applySimulationMetrics(apiData);
+        }
+      })
+      .catch(() => {});
+  }
+}
+
+function applySimulationMetrics(data) {
   const tputEl = document.getElementById('res-tput');
   const tputMbpsEl = document.getElementById('res-tput-mbps');
   const delayEl = document.getElementById('res-delay');
@@ -100,9 +147,9 @@ function updateSimulationResults() {
   if (tputMbpsEl) tputMbpsEl.textContent = data.tputMbps;
   if (delayEl) delayEl.textContent = data.delay;
   if (lossEl) lossEl.textContent = data.plr;
-  if (droppedEl) droppedEl.textContent = `${data.dropped.toLocaleString()} dropped`;
+  if (droppedEl) droppedEl.textContent = typeof data.dropped === 'number' ? `${data.dropped.toLocaleString()} dropped` : data.dropped;
   if (pdrEl) pdrEl.textContent = data.pdr;
-  if (recvEl) recvEl.textContent = `${data.recv.toLocaleString()} received`;
+  if (recvEl) recvEl.textContent = typeof data.recv === 'number' ? `${data.recv.toLocaleString()} received` : data.recv;
 }
 
 function launchPacketPipeAnimation() {
@@ -769,4 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateLeakyBucketUI();
   startLeakyBucketDrain();
   restartTopologyLoop();
+  checkBackendHealth();
+  setInterval(checkBackendHealth, 8000);
 });

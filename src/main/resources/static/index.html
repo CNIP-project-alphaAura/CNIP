@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetTrack · Network Performance Tracker (NS-2)</title>
+  <link rel="icon" type="image/png" href="assets/logo_symbol_trans.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <a href="#home" class="brand" onclick="switchTab('home')">
+        <img src="assets/logo_symbol_trans.png" alt="NetTrack Logo" class="brand-logo-img">
+        <div class="brand-text">
+          <span class="brand-title">NetTrack</span>
+          <span class="brand-subtitle">Network Performance Tracker</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#home" class="nav-link active" data-tab="home">Home</a>
+        <a href="#topology" class="nav-link" data-tab="topology">Topology</a>
+        <a href="#simulation" class="nav-link" data-tab="simulation">Simulation</a>
+        <a href="#tcp-udp" class="nav-link" data-tab="tcp-udp">TCP vs UDP</a>
+        <a href="#sliding-window" class="nav-link" data-tab="sliding-window">Sliding Window</a>
+        <a href="#gobackn" class="nav-link" data-tab="gobackn">Go-Back-N</a>
+        <a href="#leaky-bucket" class="nav-link" data-tab="leaky-bucket">Leaky Bucket</a>
+        <a href="#graphs" class="nav-link" data-tab="graphs">Graphs</a>
+        <a href="#results" class="nav-link" data-tab="results">Results</a>
+            </nav>
+      <div class="nav-right-actions">
+        <div id="backend-status-badge" class="backend-status-pill offline" title="Java Spring Boot REST API & MySQL Status">
+          <span class="status-dot"></span>
+          <span id="backend-status-text">Spring Boot · Connecting</span>
+        </div>
+      </div>
+      <button class="mobile-toggle" id="mobile-toggle">☰</button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- 1. HOME -->
+    <section id="home" class="tab-section active">
+      <div class="home-header">
+        <div>
+          <h1>Performance Overview</h1>
+          <p class="text-muted">Campus network status for 10, 50, and 100 students</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="switchTab('simulation')">⚡ Run Simulation</button>
+          <button class="btn btn-secondary" onclick="switchTab('topology')">🗺️ Topology</button>
+        </div>
+      </div>
+
+      <!-- Quick Numbers -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon blue">🚀</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Max Speed</span>
+            <span class="kpi-value">454 Mbps</span>
+            <span class="kpi-hint">Peak throughput</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon green">⏱️</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Average Delay</span>
+            <span class="kpi-value">63.8 ms</span>
+            <span class="kpi-hint">Low waiting time</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon purple">📦</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Delivery Rate</span>
+            <span class="kpi-value">99.5%</span>
+            <span class="kpi-hint">Low load delivery</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon red">🛡️</div>
+          <div class="kpi-content">
+            <span class="kpi-label">Leaky Bucket</span>
+            <span class="kpi-value">0% Loss</span>
+            <span class="kpi-hint">Drops prevented</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Traffic Loads -->
+      <div class="scenarios-row mt-4">
+        <div class="scenario-box green-border">
+          <span class="scenario-tag green">🟢 Low (10 Students)</span>
+          <p>Fast & smooth. Loss &lt; 0.6%.</p>
+        </div>
+        <div class="scenario-box yellow-border">
+          <span class="scenario-tag yellow">🟡 Medium (50 Students)</span>
+          <p>Peak lecture hour. ~5.5% loss.</p>
+        </div>
+        <div class="scenario-box red-border">
+          <span class="scenario-tag red">🔴 High (100 Students)</span>
+          <p>Exam rush. Buffer overflow, 17% loss.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPOLOGY SECTION REPLACEMENT -->
+    <section id="topology" class="tab-section">
+      <div class="card">
+        <div class="card-header topology-header">
+          <div>
+            <h2>🗺️ Network Device Topology (NS-2 Model)</h2>
+            <p class="text-muted">Live visualization of physical & logical network devices modeled in <code>elearning_topology.tcl</code></p>
+          </div>
+          <!-- Dynamic Student Selector -->
+          <div class="topo-controls">
+            <span class="control-label">Connected Students:</span>
+            <div class="pill-group" id="topo-users-pills">
+              <button class="pill-btn active" data-topo-users="10">10 Students</button>
+              <button class="pill-btn" data-topo-users="50">50 Students</button>
+              <button class="pill-btn" data-topo-users="100">100 Students</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <!-- Network Live Status Bar -->
+          <div class="topo-hud">
+            <div class="hud-item">
+              <span class="hud-label">Connected Devices</span>
+              <span class="hud-val" id="topo-connected-count">10 Devices</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">Bottleneck Link</span>
+              <span class="hud-val">10 Mbps &middot; 5ms</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">Router Queue Buffer</span>
+              <span class="hud-val" id="topo-queue-status">12 / 50 pkts</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">Link Status</span>
+              <span class="hud-val text-success" id="topo-link-status">🟢 Normal Flow</span>
+            </div>
+          </div>
+
+          <!-- Interactive Topology Canvas / SVG -->
+          <div class="topology-stage-container">
+            <svg id="topo-svg-canvas" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <!-- Gradients & Filters -->
+                <linearGradient id="cableGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#3b82f6" />
+                  <stop offset="100%" stop-color="#10b981" />
+                </linearGradient>
+                <linearGradient id="congestedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ef4444" />
+                  <stop offset="100%" stop-color="#f59e0b" />
+                </linearGradient>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <!-- Network Links (Cables) -->
+              <g id="network-cables">
+                <!-- Students to AP (Wireless) -->
+                <path id="path-laptop1-ap" d="M 120 90 L 260 210" class="cable-link wireless" />
+                <path id="path-laptop2-ap" d="M 120 210 L 260 210" class="cable-link wireless" />
+                <path id="path-laptop3-ap" d="M 120 330 L 260 210" class="cable-link wireless" />
+
+                <!-- AP to Switch -->
+                <path id="path-ap-sw" d="M 300 210 L 410 210" class="cable-link ethernet" />
+
+                <!-- Switch to Gateway Router (Bottleneck) -->
+                <path id="path-sw-rtr" d="M 470 210 L 590 210" class="cable-link bottleneck" />
+
+                <!-- Router to Internet Cloud -->
+                <path id="path-rtr-cloud" d="M 650 210 L 760 210" class="cable-link wan" />
+
+                <!-- Internet Cloud to University Server -->
+                <path id="path-cloud-srv" d="M 820 210 L 910 210" class="cable-link core" />
+              </g>
+
+              <!-- In-Flight Animated Packets Layer -->
+              <g id="network-packets-layer"></g>
+
+              <!-- Device Nodes -->
+              <!-- 1. STUDENT LAPTOPS & WORKSTATIONS -->
+              <g id="node-students-group" transform="translate(40, 40)">
+                <!-- Laptop 1 -->
+                <g id="device-laptop1" class="device-node" transform="translate(0, 20)">
+                  <rect x="0" y="0" width="70" height="46" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+                  <rect x="6" y="5" width="58" height="32" rx="2" fill="#0f172a" />
+                  <rect x="10" y="8" width="50" height="26" fill="#1e3a8a" class="screen-glow" />
+                  <path d="M -10 46 L 80 46 L 72 52 L -2 52 Z" fill="#334155" />
+                  <circle cx="35" cy="48" r="2" fill="#38bdf8" />
+                  <text x="35" y="66" text-anchor="middle" class="dev-label">Student 1</text>
+                  <text x="35" y="78" text-anchor="middle" class="dev-sub">LMS (TCP)</text>
+                </g>
+
+                <!-- Laptop 2 -->
+                <g id="device-laptop2" class="device-node" transform="translate(0, 140)">
+                  <rect x="0" y="0" width="70" height="46" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+                  <rect x="6" y="5" width="58" height="32" rx="2" fill="#0f172a" />
+                  <rect x="10" y="8" width="50" height="26" fill="#831843" class="screen-glow" />
+                  <path d="M -10 46 L 80 46 L 72 52 L -2 52 Z" fill="#334155" />
+                  <circle cx="35" cy="48" r="2" fill="#f43f5e" />
+                  <text x="35" y="66" text-anchor="middle" class="dev-label">Student 2</text>
+                  <text x="35" y="78" text-anchor="middle" class="dev-sub">Video (UDP)</text>
+                </g>
+
+                <!-- Laptop 3 -->
+                <g id="device-laptop3" class="device-node" transform="translate(0, 260)">
+                  <rect x="0" y="0" width="70" height="46" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+                  <rect x="6" y="5" width="58" height="32" rx="2" fill="#0f172a" />
+                  <rect x="10" y="8" width="50" height="26" fill="#065f46" class="screen-glow" />
+                  <path d="M -10 46 L 80 46 L 72 52 L -2 52 Z" fill="#334155" />
+                  <circle cx="35" cy="48" r="2" fill="#34d399" />
+                  <text x="35" y="66" text-anchor="middle" class="dev-label">Student 3</text>
+                  <text x="35" y="78" text-anchor="middle" class="dev-sub">Exam Portal</text>
+                </g>
+
+                <!-- Device Count Badge -->
+                <g id="student-count-badge" transform="translate(0, 350)">
+                  <rect x="-10" y="0" width="90" height="24" rx="12" fill="#2563eb" />
+                  <text x="35" y="16" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold" id="svg-student-badge">+7 more devices</text>
+                </g>
+              </g>
+
+              <!-- 2. WIRELESS ACCESS POINT (AP) -->
+              <g id="device-ap" class="device-node" transform="translate(250, 175)">
+                <!-- Base body -->
+                <rect x="0" y="15" width="60" height="40" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="2" id="ap-body"/>
+                <line x1="15" y1="15" x2="10" y2="0" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+                <line x1="45" y1="15" x2="50" y2="0" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="10" cy="0" r="3" fill="#38bdf8"/>
+                <circle cx="50" cy="0" r="3" fill="#38bdf8"/>
+                <!-- Wi-Fi waves -->
+                <path d="M 22 28 A 8 8 0 0 1 38 28" fill="none" stroke="#38bdf8" stroke-width="2" class="wifi-wave"/>
+                <path d="M 17 24 A 14 14 0 0 1 43 24" fill="none" stroke="#38bdf8" stroke-width="2" class="wifi-wave"/>
+                <!-- Status LEDs -->
+                <circle cx="20" cy="44" r="2.5" fill="#10b981" class="led-blink"/>
+                <circle cx="30" cy="44" r="2.5" fill="#38bdf8" class="led-blink"/>
+                <circle cx="40" cy="44" r="2.5" fill="#10b981" class="led-blink"/>
+                <text x="30" y="72" text-anchor="middle" class="dev-label">Wireless AP</text>
+                <text x="30" y="84" text-anchor="middle" class="dev-sub">802.11 Wi-Fi</text>
+              </g>
+
+              <!-- 3. NETWORK SWITCH -->
+              <g id="device-switch" class="device-node" transform="translate(400, 180)">
+                <rect x="0" y="0" width="75" height="48" rx="4" fill="#0f172a" stroke="#64748b" stroke-width="2" id="sw-body"/>
+                <!-- Switch arrows icon -->
+                <path d="M 18 18 L 34 18 M 30 14 L 34 18 L 30 22" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 56 30 L 40 30 M 44 26 L 40 30 L 44 34" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                <!-- RJ45 Port Ports Row -->
+                <rect x="8" y="38" width="6" height="5" fill="#334155"/>
+                <rect x="18" y="38" width="6" height="5" fill="#334155"/>
+                <rect x="28" y="38" width="6" height="5" fill="#334155"/>
+                <rect x="38" y="38" width="6" height="5" fill="#334155"/>
+                <rect x="48" y="38" width="6" height="5" fill="#334155"/>
+                <rect x="58" y="38" width="6" height="5" fill="#334155"/>
+                <!-- Activity LEDs -->
+                <circle cx="11" cy="35" r="1.5" fill="#10b981" class="led-blink"/>
+                <circle cx="21" cy="35" r="1.5" fill="#10b981" class="led-blink"/>
+                <circle cx="31" cy="35" r="1.5" fill="#f59e0b" class="led-blink"/>
+                <circle cx="41" cy="35" r="1.5" fill="#10b981" class="led-blink"/>
+                <circle cx="51" cy="35" r="1.5" fill="#10b981" class="led-blink"/>
+                <circle cx="61" cy="35" r="1.5" fill="#38bdf8" class="led-blink"/>
+                <text x="37" y="66" text-anchor="middle" class="dev-label">Access Switch</text>
+                <text x="37" y="78" text-anchor="middle" class="dev-sub">Layer 2 Switch</text>
+              </g>
+
+              <!-- 4. GATEWAY ROUTER (BOTTLENECK GATEWAY) -->
+              <g id="device-router" class="device-node" transform="translate(580, 175)">
+                <!-- Router Chassis (Cylindrical Cisco Style) -->
+                <rect x="0" y="5" width="70" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5" id="rtr-body"/>
+                <!-- 4 Router Directional Arrows -->
+                <path d="M 22 22 L 32 30 L 22 38" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 48 22 L 38 30 L 48 38" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 26 30 L 44 30" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                <!-- Queue Load Gauge on Router -->
+                <rect x="10" y="44" width="50" height="5" rx="2" fill="#0f172a" />
+                <rect x="10" y="44" width="15" height="5" rx="2" fill="#10b981" id="rtr-queue-bar"/>
+                <!-- Activity LEDs -->
+                <circle cx="15" cy="14" r="2.5" fill="#10b981" class="led-blink"/>
+                <circle cx="25" cy="14" r="2.5" fill="#38bdf8" class="led-blink"/>
+                <circle cx="35" cy="14" r="2.5" fill="#ef4444" id="rtr-loss-led" style="display:none;"/>
+                <text x="35" y="74" text-anchor="middle" class="dev-label">Campus Router</text>
+                <text x="35" y="86" text-anchor="middle" class="dev-sub" id="rtr-sub-label">Node 1 (Bottleneck)</text>
+              </g>
+
+              <!-- 5. INTERNET CLOUD / WAN -->
+              <g id="device-cloud" class="device-node" transform="translate(740, 175)">
+                <!-- Cloud SVG shape -->
+                <path d="M 25 35 
+                         A 15 15 0 0 1 45 15 
+                         A 20 20 0 0 1 75 20 
+                         A 16 16 0 0 1 90 35 
+                         A 12 12 0 0 1 85 50 
+                         L 25 50 
+                         A 12 12 0 0 1 25 35 Z" 
+                      fill="#1e3a8a" stroke="#60a5fa" stroke-width="2" id="cloud-body"/>
+                <text x="56" y="38" text-anchor="middle" fill="#93c5fd" font-size="10" font-weight="bold">Campus</text>
+                <text x="56" y="48" text-anchor="middle" fill="#bfdbfe" font-size="8">WAN Backbone</text>
+                <text x="56" y="74" text-anchor="middle" class="dev-label">Internet / WAN</text>
+                <text x="56" y="86" text-anchor="middle" class="dev-sub">High-Speed Core</text>
+              </g>
+
+              <!-- 6. UNIVERSITY SERVER RACK -->
+              <g id="device-server" class="device-node" transform="translate(890, 160)">
+                <!-- Server Rack Enclosure -->
+                <rect x="0" y="0" width="76" height="85" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="2.5" id="srv-body"/>
+                <!-- Server Blade 1 -->
+                <rect x="6" y="8" width="64" height="20" rx="3" fill="#1e293b"/>
+                <line x1="12" y1="18" x2="35" y2="18" stroke="#475569" stroke-width="2"/>
+                <circle cx="58" cy="18" r="2.5" fill="#10b981" class="led-blink"/>
+                <circle cx="64" cy="18" r="2.5" fill="#38bdf8" class="led-blink"/>
+                <!-- Server Blade 2 -->
+                <rect x="6" y="32" width="64" height="20" rx="3" fill="#1e293b"/>
+                <line x1="12" y1="42" x2="35" y2="42" stroke="#475569" stroke-width="2"/>
+                <circle cx="58" cy="42" r="2.5" fill="#10b981" class="led-blink"/>
+                <circle cx="64" cy="42" r="2.5" fill="#f59e0b" class="led-blink"/>
+                <!-- Server Blade 3 (Storage) -->
+                <rect x="6" y="56" width="64" height="20" rx="3" fill="#1e293b"/>
+                <line x1="12" y1="66" x2="35" y2="66" stroke="#475569" stroke-width="2"/>
+                <circle cx="58" cy="66" r="2.5" fill="#10b981" class="led-blink"/>
+                <circle cx="64" cy="66" r="2.5" fill="#38bdf8" class="led-blink"/>
+                <text x="38" y="104" text-anchor="middle" class="dev-label">E-Learning Server</text>
+                <text x="38" y="116" text-anchor="middle" class="dev-sub">Node 0 (LMS & Video)</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Dynamic Legend & Congestion Alert -->
+          <div class="topo-legend-bar mt-4">
+            <div class="legend-items">
+              <span class="legend-item"><span class="dot blue"></span> Data Transmission (TCP)</span>
+              <span class="legend-item"><span class="dot pink"></span> Video Stream (UDP)</span>
+              <span class="legend-item"><span class="dot green"></span> ACK Return</span>
+              <span class="legend-item"><span class="dot red"></span> Dropped Packet (Loss)</span>
+            </div>
+            <div class="congest-alert-box" id="topo-congest-alert">
+              🟢 <strong>Status:</strong> Low traffic load. Link utilization is optimal with 0% packet loss.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SIMULATION -->
+    <section id="simulation" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>⚡ Simulation Center</h2>
+          <p class="text-muted">Select load and click run to see live results</p>
+        </div>
+        <div class="card-body">
+          <div class="sim-controls-panel">
+            <div class="control-group">
+              <label>Students:</label>
+              <div class="pill-group" id="user-count-pills">
+                <button class="pill-btn active" data-users="10">10 Students</button>
+                <button class="pill-btn" data-users="50">50 Students</button>
+                <button class="pill-btn" data-users="100">100 Students</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Protocol:</label>
+              <div class="pill-group" id="protocol-pills">
+                <button class="pill-btn active" data-proto="TCP">TCP</button>
+                <button class="pill-btn" data-proto="UDP">UDP</button>
+              </div>
+            </div>
+
+            <div class="control-group action-group">
+              <button class="btn btn-primary" id="btn-run-sim">▶ Run Simulation</button>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="sim-status-box mt-3" id="sim-status-box" style="display: none;">
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="sim-progress-fill"></div>
+            </div>
+            <span class="sim-status-text" id="sim-status-text">Simulating in NS-2...</span>
+          </div>
+
+          <!-- Live KPI Results -->
+          <div class="results-kpi-grid mt-4">
+            <div class="result-card">
+              <div class="res-title">Speed (Throughput)</div>
+              <div class="res-num" id="res-tput">4,610 Kbps</div>
+              <div class="res-sub text-muted" id="res-tput-mbps">4.61 Mbps</div>
+            </div>
+            <div class="result-card">
+              <div class="res-title">Delay</div>
+              <div class="res-num" id="res-delay">63.96 ms</div>
+              <div class="res-sub text-muted">Waiting time</div>
+            </div>
+            <div class="result-card">
+              <div class="res-title">Packet Loss</div>
+              <div class="res-num text-danger" id="res-loss">0.55%</div>
+              <div class="res-sub text-muted" id="res-dropped-count">23 dropped</div>
+            </div>
+            <div class="result-card">
+              <div class="res-title">Delivery Rate</div>
+              <div class="res-num text-success" id="res-pdr">99.45%</div>
+              <div class="res-sub text-muted" id="res-recv-count">4,181 received</div>
+            </div>
+          </div>
+
+          <!-- Visual Pipe -->
+          <div class="packet-pipe-visual mt-4">
+            <div class="pipe-container">
+              <span class="pipe-label">Students</span>
+              <div class="pipe-track" id="pipe-track"></div>
+              <span class="pipe-label">Server</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. TCP VS UDP -->
+    <section id="tcp-udp" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>🔄 TCP vs UDP</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div class="proto-card tcp">
+              <div class="proto-header">
+                <h3>TCP (Reliable)</h3>
+                <span class="proto-badge">LMS & Exams</span>
+              </div>
+              <ul class="proto-features">
+                <li>✅ <strong>100% Delivery:</strong> Retransmits if lost.</li>
+                <li>✅ <strong>Flow Control:</strong> Slows down under congestion.</li>
+                <li>⚠️ <strong>Slight Delay:</strong> Waits for ACKs.</li>
+              </ul>
+            </div>
+            <div class="proto-card udp">
+              <div class="proto-header">
+                <h3>UDP (Fast Streaming)</h3>
+                <span class="proto-badge">Video & Classes</span>
+              </div>
+              <ul class="proto-features">
+                <li>⚡ <strong>Low Delay:</strong> Sends immediately.</li>
+                <li>📺 <strong>Smooth Video:</strong> No pause on packet drop.</li>
+                <li>⚠️ <strong>No Retransmit:</strong> Lost packets are gone.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-responsive mt-4">
+            <table>
+              <thead>
+                <tr>
+                  <th>Load</th>
+                  <th>Metric</th>
+                  <th>TCP</th>
+                  <th>UDP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>10 Students</strong></td>
+                  <td>Speed / Delay / Loss</td>
+                  <td>4.61 Mbps &middot; 63.9 ms &middot; 0.55%</td>
+                  <td>4.61 Mbps &middot; 63.8 ms &middot; 0.70%</td>
+                </tr>
+                <tr>
+                  <td><strong>50 Students</strong></td>
+                  <td>Speed / Delay / Loss</td>
+                  <td>78.24 Mbps &middot; 65.2 ms &middot; 5.46%</td>
+                  <td>78.91 Mbps &middot; 65.1 ms &middot; 5.51%</td>
+                </tr>
+                <tr>
+                  <td><strong>100 Students</strong></td>
+                  <td>Speed / Delay / Loss</td>
+                  <td>453.5 Mbps &middot; 62.4 ms &middot; 17.04%</td>
+                  <td>454.1 Mbps &middot; 62.4 ms &middot; 17.12%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SLIDING WINDOW -->
+    <section id="sliding-window" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>🪟 Sliding Window</h2>
+          <p class="text-muted">Sends packets in batches without waiting one-by-one</p>
+        </div>
+        <div class="card-body">
+          <div class="visualizer-box">
+            <div class="visualizer-header">
+              <div class="viz-controls">
+                <button class="btn btn-sm btn-primary" id="btn-sw-play">▶ Auto Play</button>
+                <button class="btn btn-sm btn-secondary" id="btn-sw-step">⏭ Step</button>
+                <button class="btn btn-sm btn-outline" id="btn-sw-reset">🔄 Reset</button>
+              </div>
+              <div class="viz-status" id="sw-status-text">Ready. Window Size W = 4.</div>
+            </div>
+
+            <div class="frames-track-wrapper">
+              <div class="frames-track" id="sw-frames-track"></div>
+            </div>
+
+            <div class="flight-area">
+              <div class="flight-lane">
+                <span class="lane-label">Packets ➔</span>
+                <div class="flight-channel" id="sw-packet-channel"></div>
+              </div>
+              <div class="flight-lane">
+                <span class="lane-label">ACKs ⬅</span>
+                <div class="flight-channel" id="sw-ack-channel"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. GO-BACK-N -->
+    <section id="gobackn" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>🔁 Go-Back-N (Error Recovery)</h2>
+          <p class="text-muted">Retransmits lost packets and following frames</p>
+        </div>
+        <div class="card-body">
+          <div class="visualizer-box">
+            <div class="visualizer-header">
+              <div class="viz-controls">
+                <button class="btn btn-sm btn-danger" id="btn-gbn-drop">💥 Drop Packet #3</button>
+                <button class="btn btn-sm btn-primary" id="btn-gbn-step">⏭ Step</button>
+                <button class="btn btn-sm btn-outline" id="btn-gbn-reset">🔄 Reset</button>
+              </div>
+              <div class="viz-status" id="gbn-status-text">Click "Drop Packet #3" then "Step"</div>
+            </div>
+
+            <div class="frames-track-wrapper">
+              <div class="frames-track" id="gbn-frames-track"></div>
+            </div>
+
+            <div class="gbn-explanation-box mt-3" id="gbn-step-explanation">
+              <strong>Step 0:</strong> Packets #0, #1, #2, #3 ready.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. LEAKY BUCKET -->
+    <section id="leaky-bucket" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>🪣 Leaky Bucket (Traffic Shaper)</h2>
+          <p class="text-muted">Smooths video bursts into steady flow</p>
+        </div>
+        <div class="card-body">
+          <div class="leaky-bucket-widget">
+            <div class="lb-controls">
+              <button class="btn btn-primary" id="btn-lb-burst">⚡ Send Burst (4 Mbps)</button>
+              <button class="btn btn-secondary" id="btn-lb-normal">💧 Send Normal (1 Mbps)</button>
+              <button class="btn btn-outline" id="btn-lb-reset">🔄 Reset</button>
+            </div>
+
+            <div class="lb-animation-stage">
+              <div class="lb-inflow-side">
+                <span class="lb-stage-label">Input</span>
+                <div class="pipe-faucet" id="lb-inflow-pipe">Idle</div>
+              </div>
+
+              <div class="lb-bucket-container">
+                <div class="lb-bucket-rim">Cap: 50 Pkts</div>
+                <div class="lb-bucket-body">
+                  <div class="lb-water-fill" id="lb-water-fill" style="height: 0%;"></div>
+                  <span class="lb-level-text" id="lb-level-text">0 / 50</span>
+                </div>
+                <div class="lb-leak-hole">⬇ Steady Leak (1 Mbps)</div>
+              </div>
+
+              <div class="lb-outflow-side">
+                <span class="lb-stage-label">Output</span>
+                <div class="pipe-faucet smooth">Steady Stream</div>
+              </div>
+            </div>
+
+            <div class="lb-stats-row">
+              <div class="lb-stat-item">
+                <span class="lbl">Arrived</span>
+                <span class="val" id="lb-stat-arrived">0</span>
+              </div>
+              <div class="lb-stat-item">
+                <span class="lbl">Leaked</span>
+                <span class="val text-success" id="lb-stat-leaked">0</span>
+              </div>
+              <div class="lb-stat-item">
+                <span class="lbl">Dropped</span>
+                <span class="val text-danger" id="lb-stat-dropped">0</span>
+              </div>
+              <div class="lb-stat-item">
+                <span class="lbl">Loss Rate</span>
+                <span class="val" id="lb-stat-loss-rate">0.0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. GRAPHS -->
+    <section id="graphs" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>📊 Performance Graphs</h2>
+          <p class="text-muted">NS-2 simulation plots</p>
+        </div>
+        <div class="card-body">
+          <div class="graphs-grid">
+            <div class="graph-box">
+              <div class="graph-title">1. Throughput (Speed)</div>
+              <img src="outputs/graphs/chart1_throughput_vs_load.png" alt="Throughput">
+              <p class="graph-explanation">Speed scales with students until 10 Mbps bottleneck saturates.</p>
+            </div>
+            <div class="graph-box">
+              <div class="graph-title">2. Delay (Waiting Time)</div>
+              <img src="outputs/graphs/chart2_delay_vs_load.png" alt="Delay">
+              <p class="graph-explanation">Average delay stays below 100 ms target threshold.</p>
+            </div>
+            <div class="graph-box">
+              <div class="graph-title">3. Packet Loss</div>
+              <img src="outputs/graphs/chart3_packet_loss_vs_load.png" alt="Loss">
+              <p class="graph-explanation">Surges to 17% at 100 students due to full router queue.</p>
+            </div>
+            <div class="graph-box">
+              <div class="graph-title">4. Packet Delivery Ratio</div>
+              <img src="outputs/graphs/chart4_pdr_comparison.png" alt="PDR">
+              <p class="graph-explanation">99.5% delivery under 10 users; ~83% under 100 users.</p>
+            </div>
+            <div class="graph-box">
+              <div class="graph-title">5. Leaky Bucket Impact</div>
+              <img src="outputs/graphs/chart5_leaky_bucket_impact.png" alt="Leaky Bucket">
+              <p class="graph-explanation">Cuts packet loss from 57% down to 0%.</p>
+            </div>
+            <div class="graph-box">
+              <div class="graph-title">6. Go-Back-N Window Size</div>
+              <img src="outputs/graphs/chart6_gbn_efficiency.png" alt="GBN Window">
+              <p class="graph-explanation">Window W=16 gives best balance of speed and recovery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. RESULTS -->
+    <section id="results" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>📋 Results & Commands</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div class="term-card">
+              <h4>Throughput</h4>
+              <p>Network speed (Kbps/Mbps).</p>
+            </div>
+            <div class="term-card">
+              <h4>Delay</h4>
+              <p>Travel waiting time (ms).</p>
+            </div>
+            <div class="term-card">
+              <h4>Packet Loss</h4>
+              <p>Dropped data percentage.</p>
+            </div>
+            <div class="term-card">
+              <h4>PDR</h4>
+              <p>Successfully delivered data percentage.</p>
+            </div>
+          </div>
+
+          <div class="code-box mt-4">
+            <p><strong>NS-2 Commands:</strong></p>
+            <code>ns ns2_simulations/elearning_topology.tcl 10   # 10 Students</code><br>
+            <code>ns ns2_simulations/elearning_topology.tcl 50   # 50 Students</code><br>
+            <code>ns ns2_simulations/elearning_topology.tcl 100  # 100 Students</code><br>
+            <code>awk -f awk_scripts/throughput.awk elearning_output.tr</code><br>
+            <code>awk -f awk_scripts/delay.awk elearning_output.tr</code><br>
+            <code>awk -f awk_scripts/packet_loss.awk elearning_output.tr</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>NetTrack</strong> · University E-Learning Performance Analyzer &middot; NS-2 Simulation</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
