@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NetTrack · Network Performance Tracker (NS-2)</title>
+  <link rel="icon" type="image/png" href="assets/logo_symbol_trans.png">
+  <link rel="shortcut icon" href="favicon.ico">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,13 +13,13 @@
   <!-- NAV -->
   <header class="top-nav">
     <div class="nav-container">
-      <div class="brand">
-        <span class="brand-icon">📡</span>
+      <a href="#home" class="brand" onclick="switchTab('home')">
+        <img src="assets/logo_symbol_trans.png" alt="NetTrack Logo" class="brand-logo-img">
         <div class="brand-text">
           <span class="brand-title">NetTrack</span>
           <span class="brand-subtitle">Network Performance Tracker</span>
         </div>
-      </div>
+      </a>
       <nav class="nav-menu" id="nav-menu">
         <a href="#home" class="nav-link active" data-tab="home">Home</a>
         <a href="#topology" class="nav-link" data-tab="topology">Topology</a>
