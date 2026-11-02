@@ -7,6 +7,12 @@ target/
 node_modules/
 dist/
 .vite/
+package-lock.json
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.iml
 
 # NS-2 raw trace files
 outputs/traces/
