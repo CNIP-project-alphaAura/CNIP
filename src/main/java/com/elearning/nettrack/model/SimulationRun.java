@@ -47,6 +47,24 @@ public class SimulationRun {
     @Column(name = "scenario_desc", length = 255)
     private String scenarioDescription;
 
+    @Column(name = "trace_file_path", length = 512)
+    private String traceFilePath;
+
+    @Column(name = "trace_file_name", length = 255)
+    private String traceFileName;
+
+    @Column(name = "trace_size_bytes")
+    private Long traceFileSizeBytes;
+
+    @Column(name = "execution_engine", length = 120)
+    private String executionEngine;
+
+    @Column(name = "is_native_ns2")
+    private boolean isNativeNs2;
+
+    @Column(name = "execution_duration_ms")
+    private Long executionDurationMs;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -108,6 +126,24 @@ public class SimulationRun {
 
     public String getScenarioDescription() { return scenarioDescription; }
     public void setScenarioDescription(String scenarioDescription) { this.scenarioDescription = scenarioDescription; }
+
+    public String getTraceFilePath() { return traceFilePath; }
+    public void setTraceFilePath(String traceFilePath) { this.traceFilePath = traceFilePath; }
+
+    public String getTraceFileName() { return traceFileName; }
+    public void setTraceFileName(String traceFileName) { this.traceFileName = traceFileName; }
+
+    public Long getTraceFileSizeBytes() { return traceFileSizeBytes; }
+    public void setTraceFileSizeBytes(Long traceFileSizeBytes) { this.traceFileSizeBytes = traceFileSizeBytes; }
+
+    public String getExecutionEngine() { return executionEngine; }
+    public void setExecutionEngine(String executionEngine) { this.executionEngine = executionEngine; }
+
+    public boolean isNativeNs2() { return isNativeNs2; }
+    public void setNativeNs2(boolean nativeNs2) { isNativeNs2 = nativeNs2; }
+
+    public Long getExecutionDurationMs() { return executionDurationMs; }
+    public void setExecutionDurationMs(Long executionDurationMs) { this.executionDurationMs = executionDurationMs; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

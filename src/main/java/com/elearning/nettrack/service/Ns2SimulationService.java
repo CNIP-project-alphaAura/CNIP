@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Service to execute NS-2 simulations via TCL scripts, process network traces,
+ * Service to execute real NS-2 simulations or discrete-event trace generation,
+ * parse physical .tr trace files to calculate exact network performance metrics,
  * and persist simulation results into MySQL.
  */
 @Service
@@ -22,6 +25,9 @@ public class Ns2SimulationService {
     @Autowired
     private SimulationRunRepository simulationRunRepository;
 
+    @Autowired
+    private Ns2TraceSimulationEngine traceSimulationEngine;
+
     @Value("${nettrack.simulation.ns2-executable:ns}")
     private String ns2Executable;
 
@@ -29,32 +35,143 @@ public class Ns2SimulationService {
     private String tclDir;
 
     /**
-     * Executes or retrieves simulation metrics for the given student load and protocol.
-     * Persists the newly computed run in MySQL.
+     * Executes a complete simulation workflow:
+     * 1. Generates physical .tr trace file on disk (via native NS-2 or Discrete-Event Engine).
+     * 2. Parses the generated trace file line-by-line using Ns2TraceParser.
+     * 3. Calculates throughput, delay, packet loss, and delivery ratio directly from trace events.
+     * 4. Persists the run and trace metadata into MySQL.
      */
     public SimulationRun runSimulation(int studentCount, String protocol) {
+        long startTime = System.currentTimeMillis();
         String cleanProto = protocol.toUpperCase().trim();
         if (!cleanProto.equals("TCP") && !cleanProto.equals("UDP")) {
             cleanProto = "TCP";
         }
 
-        // Clamp student count to valid scenarios
+        // Clamp student count to valid scenarios (10, 50, 100)
         int validStudents = studentCount <= 25 ? 10 : (studentCount <= 75 ? 50 : 100);
 
-        // Attempt live NS-2 execution if available on the system
-        SimulationRun run = executeNs2Script(validStudents, cleanProto);
-
-        // If NS-2 process is not installed on host OS, use deterministic NS-2 analytical simulation
-        if (run == null) {
-            run = computeDeterministicNs2Run(validStudents, cleanProto);
+        File tracesDir = new File("outputs/traces");
+        if (!tracesDir.exists()) {
+            tracesDir.mkdirs();
         }
 
-        // Persist to MySQL database
+        long timestamp = System.currentTimeMillis();
+        String traceFileName = String.format("simulation_%d_%d_%s.tr", timestamp, validStudents, cleanProto);
+        File traceFile = new File(tracesDir, traceFileName);
+
+        boolean isNative = false;
+        String executionEngine;
+
+        // Step 1: Attempt native NS-2 execution if available on the system
+        if (isNativeNs2Available()) {
+            boolean nativeOk = executeNativeNs2Script(validStudents, cleanProto, traceFile);
+            if (nativeOk && traceFile.exists() && traceFile.length() > 0) {
+                isNative = true;
+                executionEngine = "Native NS-2 Engine (ns-2.35)";
+            } else {
+                executionEngine = "Discrete-Event Trace Simulator (NS-2 Packet Engine)";
+                generateSyntheticTrace(validStudents, cleanProto, traceFile);
+            }
+        } else {
+            // Native NS-2 binary not installed on host OS; execute discrete-event trace simulator
+            executionEngine = "Discrete-Event Trace Simulator (NS-2 Packet Engine)";
+            generateSyntheticTrace(validStudents, cleanProto, traceFile);
+        }
+
+        // Step 2: Parse trace file line-by-line to calculate metrics directly from actual data
+        Ns2TraceParser.TraceMetrics metrics;
+        try {
+            metrics = Ns2TraceParser.parse(traceFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse generated NS-2 trace file: " + e.getMessage(), e);
+        }
+
+        long durationMs = System.currentTimeMillis() - startTime;
+
+        String desc = String.format("%d Students · %s · %s (%s)",
+                validStudents,
+                validStudents == 10 ? "Low Load" : (validStudents == 50 ? "Medium Load" : "High Congestion Load"),
+                cleanProto,
+                isNative ? "Native NS-2" : "Discrete Trace Simulator");
+
+        SimulationRun run = new SimulationRun(
+                validStudents, cleanProto,
+                metrics.getThroughputKbps(), metrics.getThroughputMbps(),
+                metrics.getDelayMs(), metrics.getPacketLossRate(), metrics.getDeliveryRatio(),
+                metrics.getPacketsSent(), metrics.getPacketsReceived(), metrics.getPacketsDropped(),
+                desc
+        );
+
+        run.setTraceFilePath("outputs/traces/" + traceFileName);
+        run.setTraceFileName(traceFileName);
+        run.setTraceFileSizeBytes(traceFile.length());
+        run.setExecutionEngine(executionEngine);
+        run.setNativeNs2(isNative);
+        run.setExecutionDurationMs(durationMs);
+
+        // Step 3: Persist to MySQL database
         return simulationRunRepository.save(run);
     }
 
+    private void generateSyntheticTrace(int students, String proto, File traceFile) {
+        try {
+            traceSimulationEngine.generateTraceFile(students, proto, traceFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing simulation trace file: " + e.getMessage(), e);
+        }
+    }
+
     /**
-     * Computes the exact NS-2 analytical metrics corresponding to the university topology.
+     * Checks if native NS-2 executable is installed and runnable on the host environment.
+     */
+    public boolean isNativeNs2Available() {
+        try {
+            Process process = new ProcessBuilder(ns2Executable, "-version").start();
+            boolean finished = process.waitFor(2, TimeUnit.SECONDS);
+            return finished && process.exitValue() == 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Executes external NS-2 binary with the TCL script to generate actual .tr trace file.
+     */
+    private boolean executeNativeNs2Script(int students, String proto, File targetTraceFile) {
+        try {
+            File tclFile = new File(tclDir, "elearning_topology.tcl");
+            if (!tclFile.exists()) {
+                return false;
+            }
+
+            ProcessBuilder pb = new ProcessBuilder(
+                    ns2Executable,
+                    tclFile.getAbsolutePath(),
+                    String.valueOf(students),
+                    targetTraceFile.getAbsolutePath(),
+                    proto
+            );
+            pb.directory(tclFile.getParentFile());
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Drain stdout
+                }
+            }
+
+            boolean finished = process.waitFor(20, TimeUnit.SECONDS);
+            return finished && process.exitValue() == 0;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    /**
+     * Baseline deterministic reference metrics corresponding to benchmark runs.
      */
     public SimulationRun computeDeterministicNs2Run(int students, String proto) {
         double throughputKbps;
@@ -136,39 +253,11 @@ public class Ns2SimulationService {
             }
         }
 
-        return new SimulationRun(students, proto, throughputKbps, throughputMbps,
+        SimulationRun run = new SimulationRun(students, proto, throughputKbps, throughputMbps,
                 delayMs, packetLossRate, deliveryRatio, packetsSent, packetsReceived, packetsDropped, desc);
-    }
-
-    /**
-     * Executes external NS-2 binary if installed on the environment.
-     */
-    private SimulationRun executeNs2Script(int students, String proto) {
-        try {
-            File tclFile = new File(tclDir, "elearning_topology.tcl");
-            if (!tclFile.exists()) {
-                return null;
-            }
-
-            ProcessBuilder pb = new ProcessBuilder(ns2Executable, tclFile.getAbsolutePath(), String.valueOf(students), proto);
-            pb.redirectErrorStream(true);
-            Process process = pb.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Log or parse NS-2 stdout
-                }
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                return computeDeterministicNs2Run(students, proto);
-            }
-        } catch (Exception ignored) {
-            // NS-2 binary not present on Windows host; fallback to analytical model
-        }
-        return null;
+        run.setExecutionEngine("Benchmark Reference");
+        run.setTraceFileName(String.format("elearning_%s_%s.tr", students == 10 ? "low" : (students == 50 ? "medium" : "high"), proto.toLowerCase()));
+        return run;
     }
 
     public List<SimulationRun> getAllRuns() {
@@ -179,4 +268,3 @@ public class Ns2SimulationService {
         return simulationRunRepository.findFirstByStudentCountAndProtocolOrderByCreatedAtDesc(students, proto);
     }
 }
-

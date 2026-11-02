@@ -1,5 +1,7 @@
-// Backend API Base URL
-const API_BASE_URL = "http://localhost:8080/api";
+// Backend API Base URL (works seamlessly locally and on Render cloud)
+const API_BASE_URL = (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.origin.startsWith('file:'))
+  ? `${window.location.origin}/api`
+  : "http://localhost:8080/api";
 let isBackendOnline = false;
 
 // Check Spring Boot & MySQL Connectivity
@@ -143,13 +145,19 @@ function applySimulationMetrics(data) {
   const pdrEl = document.getElementById('res-pdr');
   const recvEl = document.getElementById('res-recv-count');
 
-  if (tputEl) tputEl.textContent = data.tput;
-  if (tputMbpsEl) tputMbpsEl.textContent = data.tputMbps;
-  if (delayEl) delayEl.textContent = data.delay;
-  if (lossEl) lossEl.textContent = data.plr;
-  if (droppedEl) droppedEl.textContent = typeof data.dropped === 'number' ? `${data.dropped.toLocaleString()} dropped` : data.dropped;
-  if (pdrEl) pdrEl.textContent = data.pdr;
-  if (recvEl) recvEl.textContent = typeof data.recv === 'number' ? `${data.recv.toLocaleString()} received` : data.recv;
+  if (tputEl) tputEl.textContent = data.tput || (typeof data.throughputKbps === 'number' ? `${data.throughputKbps.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kbps` : '0 Kbps');
+  if (tputMbpsEl) tputMbpsEl.textContent = data.tputMbps || (typeof data.throughputMbps === 'number' ? `${data.throughputMbps.toFixed(2)} Mbps` : '0.00 Mbps');
+  if (delayEl) delayEl.textContent = data.delay || (typeof data.delayMs === 'number' ? `${data.delayMs.toFixed(2)} ms` : '0.00 ms');
+  if (lossEl) lossEl.textContent = data.plr || (typeof data.packetLossRate === 'number' ? `${data.packetLossRate.toFixed(2)}%` : '0.00%');
+  if (droppedEl) {
+    const drops = (typeof data.dropped === 'number') ? data.dropped : (typeof data.packetsDropped === 'number' ? data.packetsDropped : 0);
+    droppedEl.textContent = `${drops.toLocaleString()} dropped`;
+  }
+  if (pdrEl) pdrEl.textContent = data.pdr || (typeof data.deliveryRatio === 'number' ? `${data.deliveryRatio.toFixed(2)}%` : '0.00%');
+  if (recvEl) {
+    const recvs = (typeof data.recv === 'number') ? data.recv : (typeof data.packetsReceived === 'number' ? data.packetsReceived : 0);
+    recvEl.textContent = `${recvs.toLocaleString()} received`;
+  }
 }
 
 function launchPacketPipeAnimation() {
@@ -191,32 +199,86 @@ function launchPacketPipeAnimation() {
   }
 }
 
-function runSimulation() {
+let isSimulationRunning = false;
+
+async function runSimulation() {
+  if (isSimulationRunning) return;
+  isSimulationRunning = true;
+
+  const runBtn = document.getElementById('btn-run-sim');
   const statusBox = document.getElementById('sim-status-box');
   const progressFill = document.getElementById('sim-progress-fill');
   const statusText = document.getElementById('sim-status-text');
 
+  if (runBtn) runBtn.disabled = true;
   if (statusBox) statusBox.style.display = 'block';
-  if (progressFill) progressFill.style.width = '0%';
-  if (statusText) statusText.textContent = `Running NS-2 simulation for ${currentUsers} students (${currentProtocol})...`;
+  if (progressFill) progressFill.style.width = '15%';
+  if (statusText) statusText.textContent = `[1/3] Initializing network topology: ${currentUsers} students (${currentProtocol})...`;
 
-  let progress = 0;
-  const interval = setInterval(() => {
-    progress += 25;
-    if (progressFill) progressFill.style.width = `${progress}%`;
+  try {
+    // Stage 1 -> 2: triggering live simulation run
+    setTimeout(() => {
+      if (progressFill && isSimulationRunning) progressFill.style.width = '45%';
+      if (statusText && isSimulationRunning) statusText.textContent = `[2/3] Simulating packet traffic & generating .tr trace file...`;
+    }, 250);
 
-    if (progress === 50 && statusText) {
-      statusText.textContent = `Processing packet trace: ${currentUsers} students accessing university services...`;
-    } else if (progress >= 100) {
-      clearInterval(interval);
-      if (statusText) statusText.textContent = `Simulation finished! NS-2 metrics updated for ${currentUsers} users.`;
-      updateSimulationResults();
-      launchPacketPipeAnimation();
-      setTimeout(() => {
-        if (statusBox) statusBox.style.display = 'none';
-      }, 2000);
+    const response = await fetch(`${API_BASE_URL}/simulation/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentCount: currentUsers, protocol: currentProtocol })
+    });
+
+    if (progressFill) progressFill.style.width = '80%';
+    if (statusText) statusText.textContent = `[3/3] Parsing trace data & calculating AWK metrics (throughput, delay, loss)...`;
+
+    if (!response.ok) {
+      throw new Error(`Server returned HTTP ${response.status}`);
     }
-  }, 120);
+
+    const result = await response.json();
+
+    // Apply calculated results directly from actual trace data
+    applySimulationMetrics(result);
+    launchPacketPipeAnimation();
+
+    if (progressFill) progressFill.style.width = '100%';
+    if (statusText) {
+      const isNative = result.isNativeNs2 === true;
+      const engineLabel = isNative
+        ? "✓ Native NS-2 Engine (ns-2.35)"
+        : "✓ Discrete-Event Trace Simulator (NS-2 Packet Engine)";
+      const traceName = result.traceFileName || `simulation_${currentUsers}_${currentProtocol}.tr`;
+      const analyzedCount = ((result.recv || result.packetsReceived || 0) + (result.dropped || result.packetsDropped || 0)).toLocaleString();
+      const elapsed = result.executionDurationMs || 45;
+      statusText.textContent = `${engineLabel} · Trace: ${traceName} (${analyzedCount} pkts parsed in ${elapsed}ms)`;
+    }
+
+    setTimeout(() => {
+      if (statusBox && !isSimulationRunning) {
+        statusBox.style.display = 'none';
+      }
+    }, 7000);
+
+  } catch (err) {
+    console.warn("Live backend simulation execution error:", err);
+    if (progressFill) progressFill.style.width = '100%';
+    if (statusText) {
+      statusText.textContent = `⚠ Backend offline: Using local reference benchmark (Start Spring Boot on port 8080 for live trace generation)`;
+    }
+    const localData = SIMULATION_DATA[currentUsers][currentProtocol];
+    if (localData) {
+      applySimulationMetrics(localData);
+      launchPacketPipeAnimation();
+    }
+    setTimeout(() => {
+      if (statusBox && !isSimulationRunning) {
+        statusBox.style.display = 'none';
+      }
+    }, 5000);
+  } finally {
+    isSimulationRunning = false;
+    if (runBtn) runBtn.disabled = false;
+  }
 }
 
 /* ====================================================================
